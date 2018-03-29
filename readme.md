@@ -28,10 +28,11 @@ Install those requirements via setup.py (See Installtion Steps)
 
 ### Installation Steps
 -->
+- Python 3.6 is required.
 - Clone repository.
-    - `git clone https://gitlab.gistools.geog.uni-heidelberg.de/giscience/realtime_osm/get_Tasking_Manager_data.git`
+    - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
 - Change to CriticalNumbers directory
-    - `cd get_Tasking_Manager_data/`
+    - `cd hot-tm-critical-numbers.git/`
 - Create and activate virtual environment
     - `python3 -m venv venv`
     - `source venv/bin/activate`
