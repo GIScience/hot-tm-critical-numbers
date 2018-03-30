@@ -32,7 +32,7 @@ Install those requirements via setup.py (See Installtion Steps)
 - Clone repository.
     - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
 - Change to CriticalNumbers directory
-    - `cd hot-tm-critical-numbers.git/`
+    - `cd hot-tm-critical-numbers/`
 - Create and activate virtual environment
     - `python3 -m venv venv`
     - `source venv/bin/activate`
