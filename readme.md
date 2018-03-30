@@ -34,7 +34,7 @@ Install those requirements via setup.py (See Installtion Steps)
 - Change to CriticalNumbers directory
     - `cd hot-tm-critical-numbers/`
 - Create and activate virtual environment
-    - `python3 -m venv venv`
+    - `python3 -m venv venv` (or use `virtualenv -p python3.6 venv`)
     - `source venv/bin/activate`
 - Install via setup.py
     - `pip install .`
