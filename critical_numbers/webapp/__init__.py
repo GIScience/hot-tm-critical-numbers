@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap
 from config import Config
 
 app = Flask(__name__)
@@ -11,4 +12,5 @@ app.config.from_object(Config)
 from webapp import routes
 
 def serve():
-	app.run()
+    Bootstrap(app)
+    app.run()
