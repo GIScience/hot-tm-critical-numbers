@@ -3,7 +3,8 @@ from webapp import app
 from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm
 from logic import api_requests, visualizer, analysis
 
-prefix = '/critical_numbers'
+#prefix = '/critical_numbers'
+prefix = ''
 
 
 @app.route(prefix + '/', methods=['GET', 'POST'])
