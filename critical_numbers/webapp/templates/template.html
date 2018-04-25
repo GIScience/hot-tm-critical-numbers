@@ -1,40 +1,17 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %} 
+{% block app_content %} 
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                <form action = "" method = post>
-                    {{ projectIdForm.hidden_tag() }}
-                    <div>
-                        {{ projectIdForm.projectId.label }}<br>
-                        {{ projectIdForm.projectId }}<br>
-                        {{ projectIdForm.average}} Average <br>
-                        {{ projectIdForm.submit }}
-                    </div>
-                </form>
+                {{ wtf.quick_form(projectIdForm) }}
             </div>
             <div class="col-sm-4">
-                <form action = "" method = post>
-                    {{ campaignTagForm.hidden_tag() }}
-                    <div>
-                        {{ campaignTagForm.campaign_tag.label }}<br>
-                        {{ campaignTagForm.campaign_tag }}<br>
-                        {{ campaignTagForm.average }} Average <br>
-                        {{ campaignTagForm.submit}}
-                    </div>
-                </form>
+                {{ wtf.quick_form(campaignTagForm) }}
             </div>
             <div class="col-sm-4">
-                <form action = "" method = post>
-                    {{ organisationForm.hidden_tag() }}
-                    <div>
-                        {{ organisationForm.organisation.label }}<br>
-                        {{ organisationForm.organisation }}<br>
-                        {{ organisationForm.average }} Average <br>
-                        {{ organisationForm.submit}}
-                    </div>
-                </form>
+                {{ wtf.quick_form(organisationForm) }}
             </div>
         </div>
     </div>
