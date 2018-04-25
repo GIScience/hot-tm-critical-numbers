@@ -48,8 +48,8 @@ def export(fileformat):
 
 
 @cli.command('serve')
-@click.option('--production', '-p', is_flag=True)
-def serve(production):
+#@click.option('--production', '-p', is_flag=True)
+def serve():
    webapp.serve()
 
 
