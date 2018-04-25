@@ -50,7 +50,7 @@ def export(fileformat):
 @cli.command('serve')
 @click.option('--production', '-p', is_flag=True)
 def serve(production):
-   webapp.serve(production)
+   webapp.serve()
 
 
 if __name__ == '__main__':

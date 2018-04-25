@@ -10,5 +10,5 @@ app.config.from_object(Config)
 
 from webapp import routes
 
-def serve(production):
+def serve():
     app.run()
