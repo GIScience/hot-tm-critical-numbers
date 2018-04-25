@@ -18,10 +18,10 @@ def visualize(data, website=True):
     bar_chart.y_lables = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
     bar_chart.add(f'percent Mapped', [d['percentMapped'] for d in data])
-    bar_chart.add(f'validated Mapped', [d['percentValidated'] for d in data])
+    bar_chart.add(f'percent Validated', [d['percentValidated'] for d in data])
     
     if website:
-        return bar_chart.render_data_uri()
+        return bar_chart.render_data_uri(), bar_chart.render_table(style=True)
     else:
         bar_chart.render_to_file('bar_chart.svg')  # Save the svg to a file
 

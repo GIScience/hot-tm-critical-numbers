@@ -3,7 +3,6 @@ from webapp import app
 from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm
 from logic import api_requests, visualizer, analysis
 
-
 prefix = '/critical_numbers'
 
 
@@ -42,7 +41,7 @@ def index():
 
 @app.route(prefix + '/<list:projectIds>', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
-def show_chart_of_projectIds(projectIds, mean):
+def show_chart_of_projectIds(projectIds):
     data = api_requests.add(projectIds)
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
@@ -73,7 +72,7 @@ def show_chart_of_projectIds(projectIds, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
+        chart, table = visualizer.visualize(data, website=True))
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
@@ -113,14 +112,12 @@ def show_chart_of_organisation_projects(organisation, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
                                 campaignTagForm=campaignTagForm,
-                                chart=chart,
-                                table=table)
-    
+                                chart=visualizer.visualize(data, website=True))
+
 
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>', methods=['GET', 'POST'])
@@ -153,13 +150,11 @@ def show_chart_of_campaignTag_projects(campaign_tag, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
                                 campaignTagForm=campaignTagForm,
-                                chart=chart,
-                                table=table)
+                                chart=visualizer.visualize(data, website=True))
 
 
 if __name__ == "__main__":

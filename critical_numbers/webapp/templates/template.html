@@ -37,7 +37,12 @@
                 </form>
             </div>
         </div>
+    </div>
+
+    <div id="chart" class="container" align="center">
+        <embed type="image/svg+xml" src={{ chart|safe }} />
+    </div>
     <div class="container" align="center">
-        <embed type="image/svg+xml" src={{chart|safe}} style='max-width:1000px'/>
+        {{ table|safe }}
     </div>
 {% endblock %}
