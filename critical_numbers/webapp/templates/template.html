@@ -39,8 +39,8 @@
         </div>
     </div>
 
-    <div id="chart" class="container" align="center">
-        <embed type="image/svg+xml" src={{ chart|safe }} />
+    <div id="chart" class="container-fluid" align="center">
+        <embed type="image/svg+xml" src={{ chart|safe }} width="{{ chart_size }}%"/>
     </div>
     <div class="container" align="center">
         {{ table|safe }}

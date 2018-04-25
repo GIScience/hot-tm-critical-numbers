@@ -73,12 +73,13 @@ def show_chart_of_projectIds(projectIds, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
+        chart, chart_size, table = visualizer.visualize(data, website=True)
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
                                 campaignTagForm=campaignTagForm,
                                 chart=chart,
+                                chart_size=chart_size,
                                 table=table)
     
 
@@ -113,12 +114,13 @@ def show_chart_of_organisation_projects(organisation, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
+        chart, chart_size, table = visualizer.visualize(data, website=True)
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
                                 campaignTagForm=campaignTagForm,
                                 chart=chart,
+                                chart_size=chart_size,
                                 table=table)
     
 
@@ -153,12 +155,13 @@ def show_chart_of_campaignTag_projects(campaign_tag, mean):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
 
     else:
-        chart, table = visualizer.visualize(data, website=True)
+        chart, chart_size, table = visualizer.visualize(data, website=True)
         return render_template('template.html',\
                                 projectIdForm=projectIdForm, 
                                 organisationForm=organisationForm,
                                 campaignTagForm=campaignTagForm,
                                 chart=chart,
+                                chart_size=chart_size,
                                 table=table)
 
 
