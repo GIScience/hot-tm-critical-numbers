@@ -5,7 +5,7 @@ from logic import api_requests, visualizer, analysis
 from functools import wraps
 
 
-prefix = ''
+prefix = '/critical_numbers'
 
 
 @app.route(prefix + '/', methods=['GET', 'POST'])
