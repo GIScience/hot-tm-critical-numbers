@@ -1,3 +1,7 @@
+# bash scripts for production
+start_server.sh
+restart_server.sh
+kill_server.sh
 
 # Created by https://www.gitignore.io/api/python
 
@@ -100,7 +104,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
 
 # End of https://www.gitignore.io/api/python
 
