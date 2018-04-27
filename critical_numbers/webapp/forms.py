@@ -30,3 +30,8 @@ class CampaignTagForm(FlaskForm):
     campaign_tag = SelectField('Campaign tag', choices=campaign_tags_tuples, validators=[DataRequired()])
     average = BooleanField('Average')
     submit = SubmitField()
+
+
+class DownloadDataForm(FlaskForm):
+    download_data = SelectField('Download data as', choices=[('json', 'JSON'), ('csv', 'CSV')])
+    submit = SubmitField()

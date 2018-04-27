@@ -5,25 +5,29 @@ A GIScience Heidelberg project for for the HOT Tasking Manager.
 
 ## Installation
 
-<!--
 ### Requirements
 
 Python 3
 
 Following python packages and their dependences are required:
 - click
-    - For creating beautiful command line interfaces
+    - creates beautiful command line interfaces
 - requests
-    - For API Requests
+    - API Requests
 - pygal
-    - For sexy charts
+    - sexy charts
 - geomet
-    - For GeoJSON to WKT conversion
+    - GeoJSON to WKT conversion
 - flask
-    - For the Website
+    - Website
 - flask-wtf
+    - Website form handlich
+- flask-bootstrap
+    - Website style
+- gunicorn
+    - serve the website in production
 
-Install those requirements via setup.py (See Installtion Steps)
+Install requirements via setup.py (See Installtion Steps)
 
 
 ### Installation Steps
@@ -43,7 +47,7 @@ Install those requirements via setup.py (See Installtion Steps)
 ## Usage
 
 Run `python -m cli serve` to serve the website on port 5000.
-
+Until fixed the application will listen to `127.0.0.1:5000/critical_numbers/`.
 
 <!--
 ### Basic Workflow
@@ -52,3 +56,16 @@ Run `python -m cli serve` to serve the website on port 5000.
 - Run `python cli.py visualize` to get a example bar chart (.svg) of those projects.
 - Run `python cli.py new` to start from scratch.
 -->
+
+## Deployment
+
+For deployment you should not use the build in web server of Flask (eg. `flask.run()` which `cli serve` is relying upon).
+
+Recommend deployment stack for this application is:
+- Gunicorn (Application runner)
+- Nginx Reverse Proxy
+
+See official docs for more information: http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
+Or take a look at following tutorials: 
+- http://exploreflask.com/en/latest/deployment.html
+- https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux

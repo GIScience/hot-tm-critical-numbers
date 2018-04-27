@@ -1,8 +1,8 @@
-from flask import request, render_template, redirect, url_for, flash
+from flask import request, render_template, redirect, url_for, flash, jsonify
 from webapp import app
-from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm
+from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm, DownloadDataForm
 from logic import api_requests, visualizer, analysis
-from functools import wraps
+import json
 
 
 prefix = '/critical_numbers'
@@ -14,8 +14,8 @@ def index():
     return view()
 
 
-@app.route(prefix + '/<list:projectIds>', defaults={'mean': None}, methods=['GET', 'POST'])
-@app.route(prefix + '/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
+@app.route(prefix + '/projectid/<list:projectIds>', defaults={'mean': None}, methods=['GET', 'POST'])
+@app.route(prefix + '/projectid/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_projectIds(projectIds, mean):
     data = api_requests.add(projectIds)
     if mean == 'mean':
@@ -46,23 +46,16 @@ def view(data=None, mean=False):
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
     campaignTagForm = CampaignTagForm()
+    downloadDataForm = DownloadDataForm()
 
-    if data is not None:
-        if mean:
-            data = [analysis.arithmetic_mean(data)]
-        chart, chart_size, table = visualizer.visualize(data, website=True)
-    else:
-        chart = None
-        chart_size = None
-        table = None
 
     if projectIdForm.validate_on_submit():
         projectIds = projectIdForm.projectId.data
         projectIds = projectIds.replace(' ', '+')
         if projectIdForm.average.data:
-            return redirect(f'{prefix}/{projectIds}/mean')
+            return redirect(f'{prefix}/projectid/{projectIds}/mean')
         else:
-            return redirect(f'{prefix}/{projectIds}')
+            return redirect(f'{prefix}/projectid/{projectIds}')
 
     elif organisationForm.validate_on_submit():
         organisation = organisationForm.organisation.data
@@ -77,14 +70,30 @@ def view(data=None, mean=False):
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/mean')
         else:
             return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
+
+    elif downloadDataForm.validate_on_submit():
+        download_data_as = downloadDataForm.download_data.data
+        return jsonify(data)
+
     else:
-        return render_template('template.html',
-                                projectIdForm=projectIdForm,
-                                organisationForm=organisationForm,
-                                campaignTagForm=campaignTagForm,
-                                chart=chart,
-                                chart_size=chart_size,
-                                table=table)
+        if data is not None:
+            if mean:
+                data = [analysis.arithmetic_mean(data)]
+            chart, chart_size, table = visualizer.visualize(data, website=True)
+            return render_template('template.html',
+                                    projectIdForm=projectIdForm,
+                                    organisationForm=organisationForm,
+                                    campaignTagForm=campaignTagForm,
+                                    downloadDataForm=downloadDataForm,
+                                    chart=chart,
+                                    chart_size=chart_size,
+                                    table=table)
+        else:
+            return render_template('template.html',
+                                    projectIdForm=projectIdForm,
+                                    organisationForm=organisationForm,
+                                    campaignTagForm=campaignTagForm,
+                                    downloadDataForm=downloadDataForm)
 
 
 if __name__ == "__main__":

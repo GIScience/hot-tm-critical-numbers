@@ -3,7 +3,6 @@
 
 {% block app_content %} 
 
-
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
@@ -19,28 +18,12 @@
     </div>
     <br>
 
-
     <div id="chart" class="container-fluid" align="center">
         <embed type="image/svg+xml" src={{ chart|safe }} width="{{ chart_size }}%"/>
     </div>
-
-
-    <div class="container" align="center">
-        <p>
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDownloadData" aria-expanded="false" aria-controls="collapseDownloadData" align="center">
-                Download Data
-            </button>
-        </p>
-        <div class="collapse" id="collapseDownloadData">
-            <div class="card card-body" style="width: 25%">
-                {{ wtf.quick_form(downloadDataForm) }}
-            </div>
-        </div>
-    </div>
     <br>
 
-
-    <div class="container" align="center">
+    <div class="container">
         <p>
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTable" aria-expanded="false" aria-controls="collapseTable" align="center">
                 View Table
@@ -54,5 +37,9 @@
     </div>
     <br>
 
-
+    <div class="container" align="center">
+        {{ wtf.quick_form(downloadDataForm }}
+    </div>
+    <br>
+    <br>
 {% endblock %}

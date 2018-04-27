@@ -76,28 +76,6 @@ def get_campaign_tags_from_api():
         return None
 
 
-def get_campaign_tags_stats_from_api(campaign_tag):
-    '''returns a list of project Ids from given campaign tags'''
-    campaign_tag = campaign_tag.replace('_', '%20')
-    url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
-    headers = {'Accept-Language': 'en'}
-    result = requests.get(url, headers=headers)
-    campaign_tag_stats = [] 
-    if result.status_code == 200:
-        result = result.json()
-        for i in range(result['pagination']['pages']):
-            url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
-            result = requests.get(url, headers=headers)
-            result = result.json()
-            for d in result["results"]:
-                campaign_tag_stats.append(d)
-        return campaign_tag_stats
-    elif result.status_code == 404:
-        return 'No projects found'
-    else:
-        return None
-
-
 def get_organisation_stats_from_api(organisation):
     '''returns a list of project Ids from given organisation'''
     organisation = organisation.replace('_', '%20')
@@ -114,6 +92,28 @@ def get_organisation_stats_from_api(organisation):
             for d in result["results"]:
                 organisation_stats.append(d)
         return organisation_stats
+    elif result.status_code == 404:
+        return 'No projects found'
+    else:
+        return None
+
+
+def get_campaign_tags_stats_from_api(campaign_tag):
+    '''returns a list of project Ids from given campaign tags'''
+    campaign_tag = campaign_tag.replace('_', '%20')
+    url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
+    headers = {'Accept-Language': 'en'}
+    result = requests.get(url, headers=headers)
+    campaign_tag_stats = [] 
+    if result.status_code == 200:
+        result = result.json()
+        for i in range(result['pagination']['pages']):
+            url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
+            result = requests.get(url, headers=headers)
+            result = result.json()
+            for d in result["results"]:
+                campaign_tag_stats.append(d)
+        return campaign_tag_stats
     elif result.status_code == 404:
         return 'No projects found'
     else:
