@@ -1,8 +1,8 @@
-from flask import request, render_template, redirect, url_for, flash, jsonify
+from flask import request, render_template, redirect, url_for, flash, jsonify, send_file
 from webapp import app
-from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm, DownloadDataForm
-from logic import api_requests, visualizer, analysis
-import json
+from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm, DownloadDataForm, ViewChartForm
+from logic import api_requests, visualizer, analysis, converter
+import json, io
 
 
 prefix = '/critical_numbers'
@@ -47,6 +47,7 @@ def view(data=None, mean=False):
     organisationForm = OrganisationForm()
     campaignTagForm = CampaignTagForm()
     downloadDataForm = DownloadDataForm()
+    viewChartForm = ViewChartForm()
 
 
     if projectIdForm.validate_on_submit():
@@ -73,18 +74,36 @@ def view(data=None, mean=False):
 
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
-        return jsonify(data)
+
+        if download_data_as == 'json':
+            return jsonify(data)
+
+        else:
+            # download_data_as == 'csv':
+            # StringIO is output of csv.write
+            # BytesIO is required by send_file()
+            csvStringIO = converter.convert_to_csv(data)
+            csvBytesIO = io.BytesIO()
+            csvBytesIO.write(csvStringIO.getvalue().encode('utf-8'))
+            csvBytesIO.seek(0)
+            return send_file(csvBytesIO,
+                     attachment_filename="stats.csv",
+                     as_attachment=True)
+
+    elif viewChartForm.validate_on_submit():
+        return visualizer.visualize_to_file(data, to_svg = True)
 
     else:
         if data is not None:
             if mean:
                 data = [analysis.arithmetic_mean(data)]
-            chart, chart_size, table = visualizer.visualize(data, website=True)
+            chart, chart_size, table = visualizer.visualize_for_website(data)
             return render_template('template.html',
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,
                                     campaignTagForm=campaignTagForm,
                                     downloadDataForm=downloadDataForm,
+                                    viewChartForm=viewChartForm,
                                     chart=chart,
                                     chart_size=chart_size,
                                     table=table)
@@ -93,7 +112,8 @@ def view(data=None, mean=False):
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,
                                     campaignTagForm=campaignTagForm,
-                                    downloadDataForm=downloadDataForm)
+                                    downloadDataForm=downloadDataForm,
+                                    viewChartForm=viewChartForm)
 
 
 if __name__ == "__main__":

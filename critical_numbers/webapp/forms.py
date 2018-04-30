@@ -34,4 +34,8 @@ class CampaignTagForm(FlaskForm):
 
 class DownloadDataForm(FlaskForm):
     download_data = SelectField('Download data as', choices=[('json', 'JSON'), ('csv', 'CSV')])
-    submit = SubmitField()
+    submit = SubmitField('Download data')
+
+
+class ViewChartForm(FlaskForm):
+    submit = SubmitField('View chart fullscreen')

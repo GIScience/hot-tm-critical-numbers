@@ -19,40 +19,47 @@
     </div>
     <br>
 
+    
+    {% if chart is defined %}
 
-    <div id="chart" class="container-fluid" align="center">
+    <div id="chart" align="center">
         <embed type="image/svg+xml" src={{ chart|safe }} width="{{ chart_size }}%"/>
     </div>
 
-
-    <div class="container" align="center">
-        <p>
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDownloadData" aria-expanded="false" aria-controls="collapseDownloadData" align="center">
-                Download Data
-            </button>
-        </p>
-        <div class="collapse" id="collapseDownloadData">
-            <div class="card card-body" style="width: 25%">
-                {{ wtf.quick_form(downloadDataForm) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                {{ wtf.quick_form(viewChartForm) }}
+            </div>
+            <div class="col-sm">
+                <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTable" aria-expanded="false" aria-controls="collapseTable" align="center">
+                        View Table
+                    </button>
+                </p>
+                <div class="collapse" id="collapseTable">
+                    <div class="card card-body">
+                        {{ table|safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDownloadData" aria-expanded="false" aria-controls="collapseDownloadData" align="center">
+                        Download Data
+                    </button>
+                </p>
+                <div class="collapse" id="collapseDownloadData">
+                    <div class="card card-body" style="width: 50%">
+                        {{ wtf.quick_form(downloadDataForm) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <br>
 
 
-    <div class="container" align="center">
-        <p>
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTable" aria-expanded="false" aria-controls="collapseTable" align="center">
-                View Table
-            </button>
-        </p>
-        <div class="collapse" id="collapseTable">
-            <div class="card card-body">
-                {{ table|safe }}
-            </div>
-        </div>
-    </div>
-    <br>
+    {% endif %}
 
 
 {% endblock %}
