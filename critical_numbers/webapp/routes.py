@@ -28,7 +28,7 @@ def show_chart_of_organisation_projects(organisation, mean):
     data = api_requests.get_organisation_stats_from_api(organisation)
     if mean == 'mean':
         mean = True
-    return view(data, mean)
+    return view(data, mean, stats=False)
 
 
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/', defaults={'mean': None}, methods=['GET', 'POST'])
@@ -40,10 +40,10 @@ def show_chart_of_campaignTag_projects(campaign_tag, mean):
         return view(error=error)
     if mean == 'mean':
         mean = True
-    return view(data, mean)
+    return view(data, mean, stats=False)
 
 
-def view(data=None, mean=False, error=None):
+def view(data=None, mean=False, stats=True):
     '''form validation, redirecting and template rendering for all sites'''
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
@@ -84,7 +84,7 @@ def view(data=None, mean=False, error=None):
             # download_data_as == 'csv':
             # StringIO is output of csv.write
             # BytesIO is required by send_file()
-            csvStringIO = converter.convert_to_csv(data)
+            csvStringIO = converter.convert_to_csv(data, stats)
             csvBytesIO = io.BytesIO()
             csvBytesIO.write(csvStringIO.getvalue().encode('utf-8'))
             csvBytesIO.seek(0)

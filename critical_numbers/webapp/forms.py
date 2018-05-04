@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from logic import api_requests
 
 class ProjectIdForm(FlaskForm):
-    projectId = StringField('Project Id', validators=[DataRequired()])
+    projectId = StringField('Project Id (seperate by a blank)', validators=[DataRequired()])
     average = BooleanField('Average')
     submit = SubmitField()
 

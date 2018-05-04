@@ -33,25 +33,42 @@ def convert_to_geojson(data):
             json.dump(d, jsonfile)
 
 
-def convert_to_csv(data):
+def convert_to_csv(data, stats):
     csvfile = io.StringIO()
-    for d in data:
-        aoiCentroid = d['aoiCentroid']
-        d['aoiCentroid'] = wkt.dumps(aoiCentroid, decimals=4)
-    fieldnames = [
-            'projectId',
-            'name',
-            'campaignTag',
-            'percentMapped',
-            'percentValidated',
-            'created',
-            'lastUpdated',
-            'apiRequestTimestamp',
-            'aoiCentroid',
-            'mapperLevel',
-            'organisationTag',
-            'shortDescription',
-            'status']
+    if stats:
+        for d in data:
+            aoiCentroid = d['aoiCentroid']
+            if not aoiCentroid:
+                d['aoiCentroid'] = wkt.dumps(aoiCentroid, decimals=4)
+        fieldnames = [
+                'projectId',
+                'name',
+                'campaignTag',
+                'organisationTag',
+                'percentMapped',
+                'percentValidated',
+                'created',
+                'lastUpdated',
+                'apiRequestTimestamp',
+                'aoiCentroid',
+                'mapperLevel',
+                'shortDescription',
+                'status']
+    else:
+        fieldnames = [
+                'projectId',
+                'name',
+                'campaignTag',
+                'organisationTag',
+                'percentMapped',
+                'percentValidated',
+                'apiRequestTimestamp',
+                'mapperLevel',
+                'priority',
+                'activeMappers',
+                'shortDescription',
+                'status']
+
     writer = csv.DictWriter(csvfile,
                             delimiter=',',
                             quotechar='"',
