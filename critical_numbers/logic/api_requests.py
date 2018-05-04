@@ -90,8 +90,8 @@ def get_organisation_stats_from_api(organisation):
             url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}&page={i+1}'
             result = requests.get(url, headers=headers)
             result = result.json()
-            result['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
             for d in result["results"]:
+                d['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
                 organisation_stats.append(d)
         return organisation_stats
     else:
@@ -113,8 +113,8 @@ def get_campaign_tags_stats_from_api(campaign_tag):
             url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
             result = requests.get(url, headers=headers)
             result = result.json()
-            result['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
             for d in result["results"]:
+                d['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
                 campaign_tag_stats.append(d)
         return campaign_tag_stats
     else:
