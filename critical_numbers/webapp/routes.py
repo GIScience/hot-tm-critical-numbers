@@ -2,7 +2,7 @@ from flask import request, render_template, redirect, url_for, flash, jsonify, s
 from webapp import app
 from webapp.forms import ProjectIdForm, OrganisationForm, CampaignTagForm, DownloadDataForm, ViewChartForm
 from logic import api_requests, visualizer, analysis, converter
-import json, io
+import io
 
 
 prefix = '/critical_numbers'
@@ -10,7 +10,6 @@ prefix = '/critical_numbers'
 
 @app.route(prefix + '/', methods=['GET', 'POST'])
 def index():
-    organisations = api_requests.get_organisations_from_api()
     return view()
 
 
@@ -36,12 +35,15 @@ def show_chart_of_organisation_projects(organisation, mean):
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_campaignTag_projects(campaign_tag, mean):
     data = api_requests.get_campaign_tags_stats_from_api(campaign_tag)
+    if type(data) is str:
+        error = data
+        return view(error=error)
     if mean == 'mean':
         mean = True
     return view(data, mean)
 
 
-def view(data=None, mean=False):
+def view(data=None, mean=False, error=None):
     '''form validation, redirecting and template rendering for all sites'''
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()

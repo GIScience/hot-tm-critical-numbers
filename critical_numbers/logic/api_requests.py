@@ -6,8 +6,13 @@ import datetime
 def add(projectIds):
     projectIds = list(set(projectIds))
     data = []
+    error = []
     for id in projectIds:
-        data.append(get_stats_from_api(id))
+        stats = get_stats_from_api(id)
+        if stats is None:
+            continue
+        else:
+            data.append(stats)
     return data
 
 
@@ -21,11 +26,9 @@ def get_stats_from_api(projectId):
 
     if stats.status_code == 200:
         stats = stats.json()
-        timestamp = datetime.datetime.now()
-        stats['apiRequestTimestamp'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+        timestamp = datetime.datetime.utcnow()
+        stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
         return stats
-    elif stats.status_code == 404:
-        return 'No projects found'
     else:
         return None
 
@@ -44,8 +47,6 @@ def get_aoi_from_api(projectId):
 
         with open(file_path, 'w') as geojsonfile:
             json.dump(aoi, geojsonfile)
-    elif aoi.status_code == 404:
-        return 'No projects found'
     else:
         return None
 
@@ -57,8 +58,6 @@ def get_organisations_from_api():
         organisations = organisations.json()
         organisations = organisations['tags']
         return organisations
-    elif organisations.status_code == 404:
-        return 'No organisations found'
     else:
         return None
 
@@ -70,8 +69,6 @@ def get_campaign_tags_from_api():
         campaign_tags = campaign_tags.json()
         campaign_tags = campaign_tags['tags']
         return campaign_tags
-    elif organisations.status_code == 404:
-        return 'No campaign tags found'
     else:
         return None
 
@@ -92,10 +89,8 @@ def get_organisation_stats_from_api(organisation):
             for d in result["results"]:
                 organisation_stats.append(d)
         return organisation_stats
-    elif result.status_code == 404:
-        return 'No projects found'
     else:
-        return None
+        return []
 
 
 def get_campaign_tags_stats_from_api(campaign_tag):
@@ -114,7 +109,5 @@ def get_campaign_tags_stats_from_api(campaign_tag):
             for d in result["results"]:
                 campaign_tag_stats.append(d)
         return campaign_tag_stats
-    elif result.status_code == 404:
-        return 'No projects found'
     else:
-        return None
+        return []

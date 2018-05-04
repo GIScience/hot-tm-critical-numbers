@@ -35,6 +35,9 @@ def convert_to_geojson(data):
 
 def convert_to_csv(data):
     csvfile = io.StringIO()
+    for d in data:
+        aoiCentroid = d['aoiCentroid']
+        d['aoiCentroid'] = wkt.dumps(aoiCentroid, decimals=4)
     fieldnames = [
             'projectId',
             'name',
@@ -57,5 +60,7 @@ def convert_to_csv(data):
                             extrasaction='ignore')
     writer.writeheader()
     writer.writerows(data)
+    print(data)
+    print(csvfile)
     return csvfile
 
