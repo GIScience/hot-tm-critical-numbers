@@ -23,10 +23,10 @@ def get_stats_from_api(projectId):
 
     url = f'https://tasks.hotosm.org/api/v1/stats/project/{projectId}'
     stats = requests.get(url)
+    timestamp = datetime.datetime.utcnow()
 
     if stats.status_code == 200:
         stats = stats.json()
-        timestamp = datetime.datetime.utcnow()
         stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
         return stats
     else:
@@ -36,6 +36,8 @@ def get_stats_from_api(projectId):
 def get_aoi_from_api(projectId):
     url = f'https://tasks.hotosm.org/api/v1/project/{projectId}/aoi?as_file=true'
     aoi = requests.get(url)
+    timestamp = datetime.datetime.utcnow()
+
     if aoi.status_code == 200:
         aoi = aoi.json()
         dir_name = 'output'
@@ -80,6 +82,8 @@ def get_organisation_stats_from_api(organisation):
     headers = {'Accept-Language': 'en'}
     result = requests.get(url, headers=headers)
     organisation_stats = [] 
+    timestamp = datetime.datetime.utcnow()
+
     if result.status_code == 200:
         result = result.json()
         for i in range(result['pagination']['pages']):
@@ -101,12 +105,15 @@ def get_campaign_tags_stats_from_api(campaign_tag):
     headers = {'Accept-Language': 'en'}
     result = requests.get(url, headers=headers)
     campaign_tag_stats = [] 
+    timestamp = datetime.datetime.utcnow()
+
     if result.status_code == 200:
         result = result.json()
         for i in range(result['pagination']['pages']):
             url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
             result = requests.get(url, headers=headers)
             result = result.json()
+            result['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
             for d in result["results"]:
                 campaign_tag_stats.append(d)
         return campaign_tag_stats
