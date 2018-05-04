@@ -86,6 +86,7 @@ def get_organisation_stats_from_api(organisation):
             url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}&page={i+1}'
             result = requests.get(url, headers=headers)
             result = result.json()
+            result['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
             for d in result["results"]:
                 organisation_stats.append(d)
         return organisation_stats
