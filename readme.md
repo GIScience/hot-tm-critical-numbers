@@ -1,6 +1,6 @@
 # Critical Numbers
 
-A GIScience Heidelberg project for for the HOT Tasking Manager.
+A GIScience Heidelberg project for the HOT Tasking Manager.
 
 
 ## Installation
@@ -31,7 +31,7 @@ Install requirements via setup.py (See Installtion Steps)
 
 
 ### Installation Steps
--->
+
 - Python 3.6 is required.
 - Clone repository.
     - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
@@ -66,6 +66,7 @@ Recommend deployment stack for this application is:
 - Nginx Reverse Proxy
 
 See official docs for more information: http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
-Or take a look at following tutorials: 
+
+Or have a look at following tutorials: 
 - http://exploreflask.com/en/latest/deployment.html
 - https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux
