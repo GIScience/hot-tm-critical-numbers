@@ -1,10 +1,8 @@
 # Author: M. Schaub, 2018, GIScience Heidelberg 
 
+import folium
 import pygal
 from pygal.style import DefaultStyle
-import webbrowser
-import os
-from . import get_data
 
 
 def visualize_for_website(data):
@@ -61,3 +59,8 @@ def visualize(data, width, x_label_rotation):
     bar_chart.add(f'percent Validated', [d['percentValidated'] for d in data])
 
     return bar_chart
+
+
+def visualize_to_map(data):
+    m = folium.Map(location=[45.5236, -122.6750])
+    m.save('webapp/static/map.html')

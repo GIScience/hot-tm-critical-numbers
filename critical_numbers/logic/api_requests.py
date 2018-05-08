@@ -3,54 +3,21 @@ import json
 import datetime
 
 
-def add(projectIds):
-    projectIds = list(set(projectIds))
-    data = []
-    error = []
-    for id in projectIds:
-        stats = get_stats_from_api(id)
-        if stats is None:
-            continue
-        else:
-            data.append(stats)
-    return data
-
-
-def get_stats_from_api(projectId):
-    """fetches Stats for one ProjectId from \
-            https://tasks.hotosm.org/api-docs\
-            and saves/appends as (list of) dictonaries to a pickle file"""
-
-    url = f'https://tasks.hotosm.org/api/v1/stats/project/{projectId}'
-    stats = requests.get(url)
-    timestamp = datetime.datetime.utcnow()
-
-    if stats.status_code == 200:
-        stats = stats.json()
-        stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-        return stats
-    else:
-        return None
+def get_stats(cond, value):
+    '''Chooses the right request function for getting data from api'''
+    func_dict = {
+            'projectId': get_projectId_stats_from_api,
+            'organisation': get_organisation_stats_from_api,
+            'campaign_tag': get_campaign_tag_stats_from_api
+            }
+    return func_dict[cond](value)
 
 
 def get_aoi_from_api(projectId):
     url = f'https://tasks.hotosm.org/api/v1/project/{projectId}/aoi?as_file=true'
     aoi = requests.get(url)
-    timestamp = datetime.datetime.utcnow()
-
     if aoi.status_code == 200:
-        aoi = aoi.json()
-        dir_name = 'output'
-
-        if not os.path.exists(dir_name):
-            os.makedirs(dir_name)
-        file_name = f'aoi-{projectId}.geojson'
-        file_path = os.path.join(dir_name, file_name)
-
-        with open(file_path, 'w') as geojsonfile:
-            json.dump(aoi, geojsonfile)
-    else:
-        return None
+        return aoi.json()
 
 
 def get_organisations_from_api():
@@ -75,6 +42,24 @@ def get_campaign_tags_from_api():
         return None
 
 
+def get_projectId_stats_from_api(projectIds):
+    '''fetches Stats for each project from \
+            https://tasks.hotosm.org/api-docs'''
+    projectIds = list(set(projectIds))
+    data = []
+    for projectId in projectIds:
+        url = f'https://tasks.hotosm.org/api/v1/stats/project/{projectId}'
+        stats = requests.get(url)
+        timestamp = datetime.datetime.utcnow()
+        if stats.status_code == 200:
+            stats = stats.json()
+            stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+            del stats['aoiCentroid']
+            stats['aoi'] = get_aoi_from_api(projectId)
+            data.append(stats)
+    return data
+
+
 def get_organisation_stats_from_api(organisation):
     '''returns a list of project Ids from given organisation'''
     organisation = organisation.replace('_', '%20')
@@ -88,18 +73,22 @@ def get_organisation_stats_from_api(organisation):
         result = result.json()
         for i in range(result['pagination']['pages']):
             url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}&page={i+1}'
-            result = requests.get(url, headers=headers)
-            result = result.json()
-            for d in result["results"]:
-                d['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-                organisation_stats.append(d)
+            request = requests.get(url, headers=headers)
+            request = request.json()
+            results = request['results']
+            features = request['mapResults']['features']
+
+            for r, f in zip(results, features):
+                r['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+                r['aoi'] = f['geometry']
+                organisation_stats.append(r)
         return organisation_stats
     else:
         return []
 
 
-def get_campaign_tags_stats_from_api(campaign_tag):
-    '''returns a list of project Ids from given campaign tags'''
+def get_campaign_tag_stats_from_api(campaign_tag):
+    '''returns a list of project Ids from given campaign tag'''
     campaign_tag = campaign_tag.replace('_', '%20')
     url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
     headers = {'Accept-Language': 'en'}
@@ -111,11 +100,14 @@ def get_campaign_tags_stats_from_api(campaign_tag):
         result = result.json()
         for i in range(result['pagination']['pages']):
             url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
-            result = requests.get(url, headers=headers)
-            result = result.json()
-            for d in result["results"]:
-                d['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-                campaign_tag_stats.append(d)
+            request = requests.get(url, headers=headers)
+            request = request.json()
+            results = request['results']
+            features = request['mapResults']['features']
+            for r, f in zip(results, features):
+                r['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+                r['aoi'] = f['geometry']
+                campaign_tag_stats.append(r)
         return campaign_tag_stats
     else:
         return []

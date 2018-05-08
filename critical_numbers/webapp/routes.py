@@ -16,7 +16,7 @@ def index():
 @app.route(prefix + '/projectid/<list:projectIds>', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/projectid/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_projectIds(projectIds, mean):
-    data = api_requests.add(projectIds)
+    data = api_requests.get_stats('projectId', projectIds)
     if mean == 'mean':
         mean = True
     return view(data, mean)
@@ -25,7 +25,7 @@ def show_chart_of_projectIds(projectIds, mean):
 @app.route(prefix + '/organisation/<string:organisation>/', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/organisation/<string:organisation>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_organisation_projects(organisation, mean):
-    data = api_requests.get_organisation_stats_from_api(organisation)
+    data = api_requests.get_stats('organisation', organisation)
     if mean == 'mean':
         mean = True
     return view(data, mean, stats=False)
@@ -34,13 +34,18 @@ def show_chart_of_organisation_projects(organisation, mean):
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_campaignTag_projects(campaign_tag, mean):
-    data = api_requests.get_campaign_tags_stats_from_api(campaign_tag)
+    data = api_requests.get_stats('campaign_tag', campaign_tag)
     if type(data) is str:
         error = data
         return view(error=error)
     if mean == 'mean':
         mean = True
     return view(data, mean, stats=False)
+
+
+@app.route(prefix + '/map.html')
+def show_map():
+    return flask.send_file(url_for('static', filename='map.html'))
 
 
 def view(data=None, mean=False, stats=True):
@@ -100,6 +105,7 @@ def view(data=None, mean=False, stats=True):
             if mean:
                 data = [analysis.arithmetic_mean(data)]
             chart, chart_size, table = visualizer.visualize_for_website(data)
+            visualizer.visualize_to_map(data)
             return render_template('template.html',
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,

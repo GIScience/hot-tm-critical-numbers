@@ -19,7 +19,6 @@
     </div>
     <br>
 
-
     {% if chart is defined %}
 
     <div id="chart" align="center">
@@ -58,6 +57,9 @@
         </div>
     </div>
 
+    <div class="container" align="center">
+        <iframe src={{ url_for('static', filename='map.html') }}></iframe>
+    </div>
 
     {% endif %}
 

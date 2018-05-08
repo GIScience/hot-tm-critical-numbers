@@ -6,17 +6,6 @@ import json
 from geomet import wkt
 
 
-def convert(data, i):
-    if i == 'geojson':
-        convert_to_geojson(data)
-    elif i == 'wkt':
-        convert_to_wkt(data)
-    elif i == 'csv':
-        convert_to_csv(data)
-    else:
-        pass
-
-
 def convert_to_wkt(data):
     for d in data:
         projectId = d['projectId']
@@ -35,40 +24,19 @@ def convert_to_geojson(data):
 
 def convert_to_csv(data, stats):
     csvfile = io.StringIO()
-    if stats:
-        for d in data:
-            aoiCentroid = d['aoiCentroid']
-            if not aoiCentroid:
-                d['aoiCentroid'] = wkt.dumps(aoiCentroid, decimals=4)
-        fieldnames = [
-                'projectId',
-                'name',
-                'campaignTag',
-                'organisationTag',
-                'percentMapped',
-                'percentValidated',
-                'created',
-                'lastUpdated',
-                'apiRequestTimestamp',
-                'aoiCentroid',
-                'mapperLevel',
-                'shortDescription',
-                'status']
-    else:
-        fieldnames = [
-                'projectId',
-                'name',
-                'campaignTag',
-                'organisationTag',
-                'percentMapped',
-                'percentValidated',
-                'apiRequestTimestamp',
-                'mapperLevel',
-                'priority',
-                'activeMappers',
-                'shortDescription',
-                'status']
-
+    for d in data:
+        aoi = d['aoi']
+        d['aoi'] = wkt.dumps(aoi, decimals=4)
+    fieldnames = [
+            'projectId',
+            'name',
+            'campaignTag',
+            'organisationTag',
+            'percentMapped',
+            'percentValidated',
+            'apiRequestTimestamp',
+            'aoi',
+            'status']
     writer = csv.DictWriter(csvfile,
                             delimiter=',',
                             quotechar='"',
@@ -77,7 +45,4 @@ def convert_to_csv(data, stats):
                             extrasaction='ignore')
     writer.writeheader()
     writer.writerows(data)
-    print(data)
-    print(csvfile)
     return csvfile
-
