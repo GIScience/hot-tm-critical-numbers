@@ -53,8 +53,13 @@ def get_projectId_stats_from_api(projectIds):
         timestamp = datetime.datetime.utcnow()
         if stats.status_code == 200:
             stats = stats.json()
-            stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+            del stats['created']
+            del stats['lastUpdated']
+            del stats['mapperLevel']
+            del stats['shortDescription']
             del stats['aoiCentroid']
+            stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+            print(stats['apiRequestTimestampUTC'])
             stats['aoi'] = get_aoi_from_api(projectId)
             data.append(stats)
     return data

@@ -28,7 +28,7 @@ def show_chart_of_organisation_projects(organisation, mean):
     data = api_requests.get_stats('organisation', organisation)
     if mean == 'mean':
         mean = True
-    return view(data, mean, stats=False)
+    return view(data, mean)
 
 
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/', defaults={'mean': None}, methods=['GET', 'POST'])
@@ -40,7 +40,7 @@ def show_chart_of_campaignTag_projects(campaign_tag, mean):
         return view(error=error)
     if mean == 'mean':
         mean = True
-    return view(data, mean, stats=False)
+    return view(data, mean)
 
 
 @app.route(prefix + '/map.html')
@@ -48,7 +48,7 @@ def show_map():
     return flask.send_file(url_for('static', filename='map.html'))
 
 
-def view(data=None, mean=False, stats=True):
+def view(data=None, mean=False):
     '''form validation, redirecting and template rendering for all sites'''
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
@@ -81,15 +81,13 @@ def view(data=None, mean=False, stats=True):
 
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
-
         if download_data_as == 'json':
             return jsonify(data)
-
         else:
             # download_data_as == 'csv':
             # StringIO is output of csv.write
             # BytesIO is required by send_file()
-            csvStringIO = converter.convert_to_csv(data, stats)
+            csvStringIO = converter.convert_to_csv(data)
             csvBytesIO = io.BytesIO()
             csvBytesIO.write(csvStringIO.getvalue().encode('utf-8'))
             csvBytesIO.seek(0)
@@ -104,8 +102,8 @@ def view(data=None, mean=False, stats=True):
         if data is not None:
             if mean:
                 data = [analysis.arithmetic_mean(data)]
-            chart, chart_size, table = visualizer.visualize_for_website(data)
-            visualizer.visualize_to_map(data)
+            chart, chart_size, table = visualizer.visualize_for_website(data, mean)
+            #visualizer.visualize_to_map(data)
             return render_template('template.html',
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,

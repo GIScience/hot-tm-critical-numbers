@@ -5,7 +5,7 @@ import pygal
 from pygal.style import DefaultStyle
 
 
-def visualize_for_website(data):
+def visualize_for_website(data, mean=False):
     if len(data) > 16:
         width = 1800
         chart_size = 100
@@ -19,7 +19,7 @@ def visualize_for_website(data):
         chart_size = 50
         x_label_rotation = 0
     
-    bar_chart = visualize(data, width, x_label_rotation)
+    bar_chart = visualize(data, width, x_label_rotation, mean)
 
     chart = bar_chart.render_data_uri()
     table = bar_chart.render_table(style=True)
@@ -43,7 +43,7 @@ def visualize_to_file(data, to_svg):
     return bar_chart.render_response()
 
 
-def visualize(data, width, x_label_rotation):
+def visualize(data, width, x_label_rotation, mean):
     """creates a bar chart diagram wich shows\
        mapped and validated in % of each project"""
     default_style = DefaultStyle
@@ -52,7 +52,8 @@ def visualize(data, width, x_label_rotation):
             style=default_style,
             range=(0, 100), width=width)  # Create a bar graph object
     bar_chart.title = 'Mapped and Validated in %'
-    bar_chart.x_labels = [str(d['projectId']) for d in data]
+    if not mean:
+        bar_chart.x_labels = [str(d['projectId']) for d in data]
     bar_chart.y_lables = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
     bar_chart.add(f'percent Mapped', [d['percentMapped'] for d in data])
