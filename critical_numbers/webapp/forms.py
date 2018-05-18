@@ -10,7 +10,7 @@ class ProjectIdForm(FlaskForm):
 
 
 class OrganisationForm(FlaskForm):
-    organisations = api_requests.get_organisations_from_api()
+    organisations = api_requests.get_organisations()
     organisations = sorted(organisations)
     organisationsTuples = []
     for organisation in organisations:
@@ -22,7 +22,7 @@ class OrganisationForm(FlaskForm):
 
 
 class CampaignTagForm(FlaskForm):
-    campaign_tags = api_requests.get_campaign_tags_from_api()
+    campaign_tags = api_requests.get_campaign_tags()
     campaign_tags= sorted(campaign_tags)
     campaign_tags_tuples = []
     for campaign_tag in campaign_tags:
@@ -33,7 +33,7 @@ class CampaignTagForm(FlaskForm):
 
 
 class DownloadDataForm(FlaskForm):
-    download_data = SelectField('Download data as', choices=[('json', 'JSON'), ('csv', 'CSV')])
+    download_data = SelectField('Download data as', choices=[('json', 'JSON'), ('csv', 'CSV'), ('geojson', 'GEOJSON')])
     submit = SubmitField('Download data')
 
 

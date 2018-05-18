@@ -3,24 +3,14 @@ import json
 import datetime
 
 
-def get_stats(cond, value):
-    '''Chooses the right request function for getting data from api'''
-    func_dict = {
-            'projectId': get_projectId_stats_from_api,
-            'organisation': get_organisation_stats_from_api,
-            'campaign_tag': get_campaign_tag_stats_from_api
-            }
-    return func_dict[cond](value)
-
-
-def get_aoi_from_api(projectId):
+def get_aoi(projectId):
     url = f'https://tasks.hotosm.org/api/v1/project/{projectId}/aoi?as_file=true'
     aoi = requests.get(url)
     if aoi.status_code == 200:
         return aoi.json()
 
 
-def get_organisations_from_api():
+def get_organisations():
     '''returns a list of organisations'''
     organisations = requests.get('https://tasks.hotosm.org/api/v1/tags/organisations')
     if organisations.status_code == 200:
@@ -31,7 +21,7 @@ def get_organisations_from_api():
         return None
 
 
-def get_campaign_tags_from_api():
+def get_campaign_tags():
     '''returns a list of campaign tags'''
     campaign_tags = requests.get('https://tasks.hotosm.org/api/v1/tags/campaigns')
     if campaign_tags.status_code == 200:
@@ -42,15 +32,36 @@ def get_campaign_tags_from_api():
         return None
 
 
-def get_projectId_stats_from_api(projectIds):
+def get_stats(projectIds=None, organisation=None, campaign_tag=None):
+    '''fetches stats from type https://tasks.hotosm.org/api/\
+            for a list of projectIds, a organisation or a campaign tag\
+            returns a list of dict with stats of ech project'''
+    if projectIds is not None:
+        return get_projectId_stats(projectIds)
+
+    elif organisation is not None:
+        organisation = organisation.replace('_', '%20')
+        url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}'
+        return get_search_stats(url)
+
+    elif campaign_tag is not None:
+        campaign_tag = campaign_tag.replace('_', '%20')
+        url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
+        return get_search_stats(url)
+
+    else:
+        return []
+
+
+def get_projectId_stats(projectIds):
     '''fetches Stats for each project from \
-            https://tasks.hotosm.org/api-docs'''
+            https://tasks.hotosm.org/api'''
     projectIds = list(set(projectIds))
     data = []
+    timestamp = datetime.datetime.utcnow()
     for projectId in projectIds:
         url = f'https://tasks.hotosm.org/api/v1/stats/project/{projectId}'
         stats = requests.get(url)
-        timestamp = datetime.datetime.utcnow()
         if stats.status_code == 200:
             stats = stats.json()
             del stats['created']
@@ -59,60 +70,34 @@ def get_projectId_stats_from_api(projectIds):
             del stats['shortDescription']
             del stats['aoiCentroid']
             stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-            print(stats['apiRequestTimestampUTC'])
-            stats['aoi'] = get_aoi_from_api(projectId)
+            stats['aoi'] = get_aoi(projectId)
             data.append(stats)
     return data
 
 
-def get_organisation_stats_from_api(organisation):
-    '''returns a list of project Ids from given organisation'''
-    organisation = organisation.replace('_', '%20')
-    url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}'
+def get_search_stats(url):
+    '''fetches stats using search for organisation or campaign tag from\
+            https://tasks.hotosm.org/api'''
     headers = {'Accept-Language': 'en'}
     result = requests.get(url, headers=headers)
-    organisation_stats = [] 
-    timestamp = datetime.datetime.utcnow()
-
     if result.status_code == 200:
         result = result.json()
+        timestamp = datetime.datetime.utcnow()
+        collection_stats = []
         for i in range(result['pagination']['pages']):
-            url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}&page={i+1}'
+            url = f'{url}&page={i+1}'
             request = requests.get(url, headers=headers)
             request = request.json()
-            results = request['results']
-            features = request['mapResults']['features']
-
-            for r, f in zip(results, features):
-                r['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-                r['aoi'] = f['geometry']
-                organisation_stats.append(r)
-        return organisation_stats
-    else:
-        return []
-
-
-def get_campaign_tag_stats_from_api(campaign_tag):
-    '''returns a list of project Ids from given campaign tag'''
-    campaign_tag = campaign_tag.replace('_', '%20')
-    url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
-    headers = {'Accept-Language': 'en'}
-    result = requests.get(url, headers=headers)
-    campaign_tag_stats = [] 
-    timestamp = datetime.datetime.utcnow()
-
-    if result.status_code == 200:
-        result = result.json()
-        for i in range(result['pagination']['pages']):
-            url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}&page={i+1}'
-            request = requests.get(url, headers=headers)
-            request = request.json()
-            results = request['results']
-            features = request['mapResults']['features']
-            for r, f in zip(results, features):
-                r['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
-                r['aoi'] = f['geometry']
-                campaign_tag_stats.append(r)
-        return campaign_tag_stats
+            for stats in request['results']:
+                del stats['mapperLevel']
+                del stats['shortDescription']
+                del stats['status']
+                del stats['activeMappers']
+                del stats['priority']
+                del stats['locale']
+                stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+                stats['aoi'] = get_aoi(stats['projectId'])
+                collection_stats.append(stats)
+        return collection_stats
     else:
         return []

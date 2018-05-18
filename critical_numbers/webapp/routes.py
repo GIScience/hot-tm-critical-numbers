@@ -16,7 +16,7 @@ def index():
 @app.route(prefix + '/projectid/<list:projectIds>', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/projectid/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_projectIds(projectIds, mean):
-    data = api_requests.get_stats('projectId', projectIds)
+    data = api_requests.get_stats(projectIds=projectIds)
     if mean == 'mean':
         mean = True
     return view(data, mean)
@@ -25,7 +25,7 @@ def show_chart_of_projectIds(projectIds, mean):
 @app.route(prefix + '/organisation/<string:organisation>/', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/organisation/<string:organisation>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_organisation_projects(organisation, mean):
-    data = api_requests.get_stats('organisation', organisation)
+    data = api_requests.get_stats(organisation=organisation)
     if mean == 'mean':
         mean = True
     return view(data, mean)
@@ -34,7 +34,7 @@ def show_chart_of_organisation_projects(organisation, mean):
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/', defaults={'mean': None}, methods=['GET', 'POST'])
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_campaignTag_projects(campaign_tag, mean):
-    data = api_requests.get_stats('campaign_tag', campaign_tag)
+    data = api_requests.get_stats(campaign_tag=campaign_tag)
     if type(data) is str:
         error = data
         return view(error=error)
@@ -83,8 +83,12 @@ def view(data=None, mean=False):
         download_data_as = downloadDataForm.download_data.data
         if download_data_as == 'json':
             return jsonify(data)
-        else:
-            # download_data_as == 'csv':
+        elif download_data_as == 'geojson':
+            geojson = converter.convert_to_geojson(data)
+            return send_file(geojson,
+                     attachment_filename="stats.geojson",
+                     as_attachment=True)
+        elif download_data_as == 'csv':
             # StringIO is output of csv.write
             # BytesIO is required by send_file()
             csvStringIO = converter.convert_to_csv(data)
@@ -103,7 +107,6 @@ def view(data=None, mean=False):
             if mean:
                 data = [analysis.arithmetic_mean(data)]
             chart, chart_size, table = visualizer.visualize_for_website(data, mean)
-            #visualizer.visualize_to_map(data)
             return render_template('template.html',
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,

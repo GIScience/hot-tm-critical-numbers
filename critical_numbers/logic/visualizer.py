@@ -1,4 +1,4 @@
-# Author: M. Schaub, 2018, GIScience Heidelberg 
+#Author: M. Schaub, 2018, GIScience Heidelberg 
 
 import folium
 import pygal
@@ -43,7 +43,7 @@ def visualize_to_file(data, to_svg):
     return bar_chart.render_response()
 
 
-def visualize(data, width, x_label_rotation, mean):
+def visualize(data, width, x_label_rotation, mean=False):
     """creates a bar chart diagram wich shows\
        mapped and validated in % of each project"""
     default_style = DefaultStyle
@@ -62,6 +62,20 @@ def visualize(data, width, x_label_rotation, mean):
     return bar_chart
 
 
-def visualize_to_map(data):
-    m = folium.Map(location=[45.5236, -122.6750])
+def visualize_to_map(data, marker=False):
+    m = folium.Map()
+    featureCollection = {"type": "FeatureCollection", "features": []}
+    if marker:
+        aoiCoordinates = []
+        for d in data:
+            aoi = d['aoi']['coordinates']
+            aoiCoordinates.append(aoi)
+        folium.features.PolygonMarker(locations=aoiCoordinates).add_to(m)
+    else:
+        for d in data:
+            aoi = d['aoi']
+            feature= {"type": "Feature", "geometry": aoi}
+            featureCollection["features"].append(feature)
+        folium.GeoJson(featureCollection).add_to(m)
+    return m.render()
     m.save('webapp/static/map.html')

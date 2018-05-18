@@ -3,7 +3,6 @@
 
 {% block app_content %} 
 
-
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
@@ -57,12 +56,13 @@
         </div>
     </div>
 <!--
-    <div class="container" align="center">
-        <iframe src={{ url_for('static', filename='map.html') }}></iframe>
+    <div class="container">
+        {{ m|safe }}
+    </div>
+<div class="container">
+        <iframe src={{ url_for('static', filename='map.html') }} style="position: absolute; width: 75%; height: 75%; border: none"></iframe>
     </div>
 -->
-
     {% endif %}
-
 
 {% endblock %}

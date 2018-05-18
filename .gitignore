@@ -108,3 +108,4 @@ venv.bak/
 # End of https://www.gitignore.io/api/python
 
 map.html
+*.geojson

@@ -1,6 +1,7 @@
 # Author: M. Schaub, 2018, GIScience Heidelberg 
 import io
 import csv
+import json
 from geomet import wkt
 
 
@@ -29,3 +30,22 @@ def convert_to_csv(data):
     writer.writeheader()
     writer.writerows(data)
     return csvfile
+
+
+def convert_to_geojson(data):
+    geojsonfile = io.BytesIO()
+    featureCollection = {"type": "FeatureCollection", "features": []}
+    for stats in data:
+        aoi = stats['aoi']
+        del stats['aoi']
+        feature = {"type": "Feature",
+                "geometry": {
+                    "type": aoi['type'],
+                    "coordinates": aoi['coordinates']
+                    },
+                "properties": stats
+                }
+        featureCollection['features'].append(feature)
+    with open(geojsonfile, 'w') as f:
+        json.dump(featureCollection, f)
+    return geojsonfile
