@@ -2,6 +2,7 @@
 import logic
 import click
 import webapp
+from shutil import rmtree
 
 
 @click.group()
@@ -12,7 +13,8 @@ def cli():
 @cli.command('new')
 def new():
     '''Creates a new analysis. Removes previous one.'''
-    remover.removes()
+    rmtree('output')
+    click.echo('Old analysis discontinued (removed output folder). New analysis can be started.')
 
 
 @cli.command('add')
@@ -22,16 +24,6 @@ def new():
 def add(projectid):
     '''Adds statistical data of HOT Takas Manager Projects\
        to your current analysis. (Makes API requests)'''
-    click.echo(api_requests.add(projectid))
-
-
-@cli.command('delete')
-@click.option('--projectid', '-i', multiple=True, type=int,
-              help='Takes a projectId as input.\
-                    Multiple parameters are supported. E.g. <-i 4222 -i 4212>')
-def delete(projectid):
-    '''Deletes projects from your current analysis.'''
-    click.echo(get_data.delete(projectid))
 
 
 @cli.command('visualize')

@@ -33,7 +33,7 @@ def convert_to_csv(data):
 
 
 def convert_to_geojson(data):
-    geojsonfile = io.BytesIO()
+    #geojsonfile = io.BytesIO()
     featureCollection = {"type": "FeatureCollection", "features": []}
     for stats in data:
         aoi = stats['aoi']
@@ -46,6 +46,7 @@ def convert_to_geojson(data):
                 "properties": stats
                 }
         featureCollection['features'].append(feature)
-    with open(geojsonfile, 'w') as f:
-        json.dump(featureCollection, f)
-    return geojsonfile
+    return featureCollection
+    #with open(geojsonfile, 'w') as f:
+        #json.dump(featureCollection, f)
+    #return geojsonfile

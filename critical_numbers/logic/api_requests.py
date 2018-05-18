@@ -48,9 +48,9 @@ def get_stats(projectIds=None, organisation=None, campaign_tag=None):
         campaign_tag = campaign_tag.replace('_', '%20')
         url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
         return get_search_stats(url)
-
     else:
-        return []
+        url = 'https://tasks.hotosm.org/api/v1/project/search?mapperLevel=ALL'
+        return get_search_stats(url)
 
 
 def get_projectId_stats(projectIds):
@@ -75,17 +75,19 @@ def get_projectId_stats(projectIds):
     return data
 
 
-def get_search_stats(url):
+def get_search_stats(base_url):
     '''fetches stats using search for organisation or campaign tag from\
             https://tasks.hotosm.org/api'''
     headers = {'Accept-Language': 'en'}
-    result = requests.get(url, headers=headers)
+    result = requests.get(base_url, headers=headers)
     if result.status_code == 200:
         result = result.json()
         timestamp = datetime.datetime.utcnow()
         collection_stats = []
+        pages = result['pagination']['pages']
         for i in range(result['pagination']['pages']):
-            url = f'{url}&page={i+1}'
+            print(f'{int(i*100/pages)}%')
+            url = f'{base_url}&page={i+1}'
             request = requests.get(url, headers=headers)
             request = request.json()
             for stats in request['results']:
@@ -98,6 +100,8 @@ def get_search_stats(url):
                 stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
                 stats['aoi'] = get_aoi(stats['projectId'])
                 collection_stats.append(stats)
+            if i == 2:
+                break
         return collection_stats
     else:
         return []

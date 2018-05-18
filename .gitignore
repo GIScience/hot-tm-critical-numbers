@@ -109,3 +109,6 @@ venv.bak/
 
 map.html
 *.geojson
+*.json
+*.csv
+*.wkt
