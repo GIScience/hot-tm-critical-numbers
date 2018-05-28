@@ -81,7 +81,7 @@ def view(data=None, mean=False):
 
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
-        elif download_data_as == 'geojson':
+        if download_data_as == 'geojson':
             return jsonify(converter.convert_to_geojson(data))
         elif download_data_as == 'csv':
             # StringIO is output of csv.write
