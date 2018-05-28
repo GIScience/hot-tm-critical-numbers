@@ -33,7 +33,7 @@ class CampaignTagForm(FlaskForm):
 
 
 class DownloadDataForm(FlaskForm):
-    download_data = SelectField('Download data as', choices=[('json', 'JSON'), ('csv', 'CSV')])#, ('geojson', 'GEOJSON')])
+    download_data = SelectField('Download data as', choices=[('geojson', 'GEOJSON'), ('csv', 'CSV (UTF-8)')])
     submit = SubmitField('Download data')
 
 

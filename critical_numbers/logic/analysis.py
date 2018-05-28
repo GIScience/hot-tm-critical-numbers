@@ -11,13 +11,11 @@ def arithmetic_mean(data):
     percentValidatedMean = percentValidatedMean * 100 / (100 * len(data))
     
     name = 'Arithmetic mean'
-    apiRequestTimestamp = 'apiRequestTimestamp'
 
     stats = { 
             'name': name, 
             'percentMapped': percentMappedMean,
             'percentValidated': percentValidatedMean,
-            'apiRequestTimestamp': apiRequestTimestamp,
             }
     return stats
 

@@ -81,13 +81,8 @@ def view(data=None, mean=False):
 
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
-        if download_data_as == 'json':
-            return jsonify(data)
         elif download_data_as == 'geojson':
-            geojson = converter.convert_to_geojson(data)
-            return send_file(geojson,
-                     attachment_filename="stats.geojson",
-                     as_attachment=True)
+            return jsonify(converter.convert_to_geojson(data))
         elif download_data_as == 'csv':
             # StringIO is output of csv.write
             # BytesIO is required by send_file()
@@ -104,7 +99,9 @@ def view(data=None, mean=False):
 
     else:
         if data is not None:
-            if mean:
+            print(data)
+            print(len(data))
+            if mean and len(data) > 1:
                 data = [analysis.arithmetic_mean(data)]
             chart, chart_size, table = visualizer.visualize_for_website(data, mean)
             return render_template('template.html',
