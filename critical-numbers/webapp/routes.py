@@ -17,7 +17,7 @@ def index():
 @app.route(prefix + '/projectid/<list:projectIds>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_projectIds(projectIds, mean):
     data = api_requests.get_stats(projectIds=projectIds)
-    if mean == 'mean':
+    if mean is not None:
         mean = True
     return view(data, mean)
 
@@ -26,7 +26,7 @@ def show_chart_of_projectIds(projectIds, mean):
 @app.route(prefix + '/organisation/<string:organisation>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_organisation_projects(organisation, mean):
     data = api_requests.get_stats(organisation=organisation)
-    if mean == 'mean':
+    if mean is not None:
         mean = True
     return view(data, mean)
 
@@ -35,20 +35,12 @@ def show_chart_of_organisation_projects(organisation, mean):
 @app.route(prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>', methods=['GET', 'POST'])
 def show_chart_of_campaignTag_projects(campaign_tag, mean):
     data = api_requests.get_stats(campaign_tag=campaign_tag)
-    if type(data) is str:
-        error = data
-        return view(error=error)
-    if mean == 'mean':
+    if mean is not None:
         mean = True
     return view(data, mean)
 
 
-@app.route(prefix + '/map.html')
-def show_map():
-    return flask.send_file(url_for('static', filename='map.html'))
-
-
-def view(data=None, mean=False):
+def view(data=None, mean=None):
     '''form validation, redirecting and template rendering for all sites'''
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
@@ -84,12 +76,7 @@ def view(data=None, mean=False):
         if download_data_as == 'geojson':
             return jsonify(converter.convert_to_geojson(data))
         elif download_data_as == 'csv':
-            # StringIO is output of csv.write
-            # BytesIO is required by send_file()
-            csvStringIO = converter.convert_to_csv(data)
-            csvBytesIO = io.BytesIO()
-            csvBytesIO.write(csvStringIO.getvalue().encode('utf-8'))
-            csvBytesIO.seek(0)
+            csvBytesIO = converter.convert_to_csv(data)
             return send_file(csvBytesIO,
                      attachment_filename="stats.csv",
                      as_attachment=True)
@@ -98,12 +85,18 @@ def view(data=None, mean=False):
         return visualizer.visualize_to_file(data, to_svg = True)
 
     else:
-        if data is not None:
-            print(data)
-            print(len(data))
-            if mean and len(data) > 1:
+        if data is None:
+            return render_template('template.html',
+                                    projectIdForm=projectIdForm,
+                                    organisationForm=organisationForm,
+                                    campaignTagForm=campaignTagForm,
+                                    downloadDataForm=downloadDataForm,
+                                    viewChartForm=viewChartForm)
+        else:
+            if mean is True and len(data) > 1:
                 data = [analysis.arithmetic_mean(data)]
             chart, chart_size, table = visualizer.visualize_for_website(data, mean)
+            leaflet_map = visualizer.visualize_to_map(data)
             return render_template('template.html',
                                     projectIdForm=projectIdForm,
                                     organisationForm=organisationForm,
@@ -112,14 +105,8 @@ def view(data=None, mean=False):
                                     viewChartForm=viewChartForm,
                                     chart=chart,
                                     chart_size=chart_size,
-                                    table=table)
-        else:
-            return render_template('template.html',
-                                    projectIdForm=projectIdForm,
-                                    organisationForm=organisationForm,
-                                    campaignTagForm=campaignTagForm,
-                                    downloadDataForm=downloadDataForm,
-                                    viewChartForm=viewChartForm)
+                                    table=table,
+                                    leaflet_map=leaflet_map)
 
 
 if __name__ == "__main__":

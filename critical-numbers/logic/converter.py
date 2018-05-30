@@ -7,7 +7,7 @@ from geomet import wkt
 
 def convert_to_csv(data):
     '''Converts a list of dict to csv. Returns csv.'''
-    csvfile = io.StringIO()
+    csvStringIO = io.StringIO()
     for d in data:
         aoi = d['aoi']
         d['aoi'] = wkt.dumps(aoi, decimals=4)
@@ -21,7 +21,7 @@ def convert_to_csv(data):
             'apiRequestTimestampUTC',
             'aoi',
             'status']
-    writer = csv.DictWriter(csvfile,
+    writer = csv.DictWriter(csvStringIO,
                             delimiter=',',
                             quotechar='"',
                             quoting=csv.QUOTE_MINIMAL,
@@ -29,11 +29,16 @@ def convert_to_csv(data):
                             extrasaction='ignore')
     writer.writeheader()
     writer.writerows(data)
-    return csvfile
+
+    # BytesIO is required by falsks send_file()
+    csvBytesIO = io.BytesIO()
+    csvBytesIO.write(csvStringIO.getvalue().encode('utf-8'))
+    csvBytesIO.seek(0)
+
+    return csvBytesIO
 
 
 def convert_to_geojson(data):
-    #geojsonfile = io.BytesIO()
     featureCollection = {"type": "FeatureCollection", "features": []}
     for stats in data:
         aoi = stats['aoi']
@@ -47,6 +52,3 @@ def convert_to_geojson(data):
                 }
         featureCollection['features'].append(feature)
     return featureCollection
-    #with open(geojsonfile, 'w') as f:
-        #json.dump(featureCollection, f)
-    #return geojsonfile

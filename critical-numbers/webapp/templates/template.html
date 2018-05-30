@@ -54,15 +54,11 @@
                 </div>
             </div>
         </div>
-    </div>
-<!--
-    <div class="container">
-        {{ m|safe }}
-    </div>
-<div class="container">
-        <iframe src={{ url_for('static', filename='map.html') }} style="position: absolute; width: 75%; height: 75%; border: none"></iframe>
-    </div>
--->
-    {% endif %}
+    </div> 
 
+    <div class="container">
+        <iframe srcdoc="{{ leaflet_map }}" style="position: absolute; width: 75%; height: 75%; border: none"></iframe>
+    </div>
+
+    {% endif %}
 {% endblock %}

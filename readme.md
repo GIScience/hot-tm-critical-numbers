@@ -24,6 +24,8 @@ Following python packages and their dependences are required:
     - Website form handlich
 - flask-bootstrap
     - Website style
+- folium
+    - Python data, leaflet.js maps
 - gunicorn
     - serve the website in production
 
@@ -32,7 +34,7 @@ Install requirements via setup.py (See Installtion Steps)
 
 ### Installation Steps
 
-- Python 3.6 is required.
+- Python >3.6 is required.
 - Clone repository.
     - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
 - Change to CriticalNumbers directory
@@ -47,15 +49,8 @@ Install requirements via setup.py (See Installtion Steps)
 ## Usage
 
 Run `python -m cli serve` to serve the website on port 5000.
-Until fixed the application will listen to `127.0.0.1:5000/critical_numbers/`.
+Until fixed the server will listen to `127.0.0.1:5000/critical_numbers/`.
 
-<!--
-### Basic Workflow
-
-- Run `python cli.py add` to fetch statistical data of two default projects from HOT Tasking Manager API to your analysis.
-- Run `python cli.py visualize` to get a example bar chart (.svg) of those projects.
-- Run `python cli.py new` to start from scratch.
--->
 
 ## Deployment
 
@@ -70,3 +65,45 @@ See official docs for more information: http://flask.pocoo.org/docs/0.12/deployi
 Or have a look at following tutorials: 
 - http://exploreflask.com/en/latest/deployment.html
 - https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux
+
+
+### Setting Up Gunicorn and Supervisor
+
+#### Gunicorn
+
+Gunicorn is a pure Python web server (robust production server)
+
+`gunicorn -b 127.0.0.1:5000 -w 4 webapp:app`
+
+- `-b`: option tells gunicorn where to listen for requests
+- `-w`: option configures how many workers gunicorn will run
+- `name_of_app_to_run:app`
+
+
+#### Supervisor
+
+The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in `/etc/supervisor/conf.d`.
+Here is the configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`)
+
+```
+[program:hot-tm-critical-numbers]
+command=/data/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 webapp:app
+directory=/data/hot-tm-critical-numbers/critical-numbers
+user=mschaub
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stderr_logfile=/var/log/hot-tm-critical-numbers/out.log
+stdout_logfile=/var/log/hot-tm-critical-numbers/err.log
+```
+
+Logs can be viewed in `/var/log/hot-tm-critical-numbers/`
+
+To run or rerun supervisor and configured programs (e.g. hot-tm-critical-numbers) it is enough to run `supervisorctl reload`.
+
+Following commands could be also be useful:
+- `supervisorctl start hot-tm-critical-numbers`
+- `supervisorctl stop hot-tm-critical-numbers`
+- `supervisorctl reread`
+- `supervisorctl update`

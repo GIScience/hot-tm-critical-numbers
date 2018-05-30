@@ -5,7 +5,7 @@ import pygal
 from pygal.style import DefaultStyle
 
 
-def visualize_for_website(data, mean=False):
+def visualize_for_website(data, mean):
     if len(data) > 16:
         width = 1800
         chart_size = 100
@@ -43,7 +43,7 @@ def visualize_to_file(data, to_svg):
     return bar_chart.render_response()
 
 
-def visualize(data, width, x_label_rotation, mean=False):
+def visualize(data, width, x_label_rotation, mean=None):
     """creates a bar chart diagram wich shows\
        mapped and validated in % of each project"""
     default_style = DefaultStyle
@@ -52,7 +52,7 @@ def visualize(data, width, x_label_rotation, mean=False):
             style=default_style,
             range=(0, 100), width=width)  # Create a bar graph object
     bar_chart.title = 'Mapped and Validated in %'
-    if not mean:
+    if mean is None:
         bar_chart.x_labels = [str(d['projectId']) for d in data]
     bar_chart.y_lables = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
@@ -62,20 +62,18 @@ def visualize(data, width, x_label_rotation, mean=False):
     return bar_chart
 
 
-def visualize_to_map(data, marker=False):
-    m = folium.Map()
+def visualize_to_map(data):
+    m = folium.Map(tiles='Mapbox Bright', zoom_start=2) 
     featureCollection = {"type": "FeatureCollection", "features": []}
-    if marker:
-        aoiCoordinates = []
-        for d in data:
-            aoi = d['aoi']['coordinates']
-            aoiCoordinates.append(aoi)
-        folium.features.PolygonMarker(locations=aoiCoordinates).add_to(m)
-    else:
-        for d in data:
-            aoi = d['aoi']
-            feature= {"type": "Feature", "geometry": aoi}
-            featureCollection["features"].append(feature)
-        folium.GeoJson(featureCollection).add_to(m)
-    return m.render()
-    m.save('webapp/static/map.html')
+    # aoiCoordinates = []
+    # for d in data:
+        # aoi = d['aoi']['coordinates']
+        # folium.features.PolygonMarker(locations=aoi).add_to(m)
+    for d in data:
+        aoi = d['aoi']
+        feature = {"type": "Feature", "geometry": aoi}
+        featureCollection["features"].append(feature)
+    folium.GeoJson(featureCollection).add_to(m)
+    m = m.get_root()
+    m = m.render()
+    return m

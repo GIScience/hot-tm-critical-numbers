@@ -1,3 +1,6 @@
+# Not in use for website
+# Aor API connector se api_requests.py
+
 import pickle
 import json
 import os.path
