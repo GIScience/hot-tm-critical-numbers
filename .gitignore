@@ -1,7 +1,9 @@
-# bash scripts for production
-start_server.sh
-restart_server.sh
-kill_server.sh
+map.html
+*.geojson
+*.json
+*.csv
+*.wkt
+*.sh
 
 # Created by https://www.gitignore.io/api/python
 
@@ -106,9 +108,3 @@ venv.bak/
 .mypy_cache/
 
 # End of https://www.gitignore.io/api/python
-
-map.html
-*.geojson
-*.json
-*.csv
-*.wkt
