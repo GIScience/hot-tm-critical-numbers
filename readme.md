@@ -7,7 +7,7 @@ A GIScience Heidelberg project for the HOT Tasking Manager.
 
 ### Requirements
 
-Python 3
+\> Python 3.6
 
 Following python packages and their dependences are required:
 - click
@@ -29,13 +29,12 @@ Following python packages and their dependences are required:
 - gunicorn
     - serve the website in production
 
-Install requirements via setup.py (See Installtion Steps)
+Install requirements via setup.py (See Installtion Steps).
 
 
 ### Installation Steps
 
-- Python >3.6 is required.
-- Clone repository.
+- Clone repository
     - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
 - Change to CriticalNumbers directory
     - `cd hot-tm-critical-numbers/`
@@ -71,7 +70,7 @@ Or have a look at following tutorials:
 
 #### Gunicorn
 
-Gunicorn is a pure Python web server (robust production server)
+Gunicorn is a pure Python web server (robust production server).
 
 `gunicorn -b 127.0.0.1:5000 -w 4 webapp:app`
 
@@ -83,7 +82,7 @@ Gunicorn is a pure Python web server (robust production server)
 #### Supervisor
 
 The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in `/etc/supervisor/conf.d`.
-Here is the configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`)
+Here is the configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`).
 
 ```
 [program:hot-tm-critical-numbers]
@@ -98,7 +97,7 @@ stderr_logfile=/var/log/hot-tm-critical-numbers/out.log
 stdout_logfile=/var/log/hot-tm-critical-numbers/err.log
 ```
 
-Logs can be viewed in `/var/log/hot-tm-critical-numbers/`
+Logs can be viewed at `/var/log/hot-tm-critical-numbers/`.
 
 To run or rerun supervisor and configured programs (e.g. hot-tm-critical-numbers) it is enough to run `supervisorctl reload`.
 
