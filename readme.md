@@ -88,7 +88,7 @@ Here is the configuration file for hot-tm-critical-numbers (`hot-tm-critical-num
 [program:hot-tm-critical-numbers]
 command=/data/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 webapp:app
 directory=/data/hot-tm-critical-numbers/critical-numbers
-user=mschaub
+user=username
 autostart=true
 autorestart=true
 stopasgroup=true
