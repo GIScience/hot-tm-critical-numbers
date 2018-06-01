@@ -12,7 +12,9 @@ def get_aoi(projectId):
 
 def get_organisations():
     '''returns a list of organisations'''
-    organisations = requests.get('https://tasks.hotosm.org/api/v1/tags/organisations')
+    organisations = requests.get(
+            'https://tasks.hotosm.org/api/v1/tags/organisations'
+            )
     if organisations.status_code == 200:
         organisations = organisations.json()
         organisations = organisations['tags']
@@ -23,7 +25,9 @@ def get_organisations():
 
 def get_campaign_tags():
     '''returns a list of campaign tags'''
-    campaign_tags = requests.get('https://tasks.hotosm.org/api/v1/tags/campaigns')
+    campaign_tags = requests.get(
+            'https://tasks.hotosm.org/api/v1/tags/campaigns'
+            )
     if campaign_tags.status_code == 200:
         campaign_tags = campaign_tags.json()
         campaign_tags = campaign_tags['tags']
@@ -46,7 +50,7 @@ def get_stats(projectIds=None, organisation=None, campaign_tag=None):
 
     elif campaign_tag is not None:
         campaign_tag = campaign_tag.replace('_', '%20')
-        url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
+        url = f'https://tasks.hotosm.org/api/v1/projectsearch?campaignTag={campaign_tag}'
         return get_search_stats(url)
     else:
         url = 'https://tasks.hotosm.org/api/v1/project/search?mapperLevel=ALL'
@@ -69,7 +73,9 @@ def get_projectId_stats(projectIds):
             del stats['mapperLevel']
             del stats['shortDescription']
             del stats['aoiCentroid']
-            stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+            stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(
+                    timestamp
+                    )
             stats['aoi'] = get_aoi(projectId)
             data.append(stats)
     return data
@@ -97,7 +103,9 @@ def get_search_stats(base_url):
                 del stats['activeMappers']
                 del stats['priority']
                 del stats['locale']
-                stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(timestamp)
+                stats['apiRequestTimestampUTC'] = '{:%Y-%m-%d %H:%M}'.format(
+                        timestamp
+                        )
                 stats['aoi'] = get_aoi(stats['projectId'])
                 collection_stats.append(stats)
             if i == 2:

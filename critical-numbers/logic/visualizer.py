@@ -1,4 +1,4 @@
-#Author: M. Schaub, 2018, GIScience Heidelberg 
+# Author: M. Schaub, 2018, GIScience Heidelberg
 
 import folium
 import pygal
@@ -18,7 +18,7 @@ def visualize_for_website(data, mean):
         width = 800
         chart_size = 50
         x_label_rotation = 0
-    
+
     bar_chart = visualize(data, width, x_label_rotation, mean)
 
     chart = bar_chart.render_data_uri()
@@ -38,7 +38,7 @@ def visualize_to_file(data, to_svg):
         width = 800
         x_label_rotation = 0
 
-    bar_chart = visualize(data, width , x_label_rotation)
+    bar_chart = visualize(data, width, x_label_rotation)
 
     return bar_chart.render_response()
 
@@ -48,9 +48,12 @@ def visualize(data, width, x_label_rotation, mean=None):
        mapped and validated in % of each project"""
     default_style = DefaultStyle
     default_style.background = 'transparent'
-    bar_chart = pygal.Bar(x_label_rotation=x_label_rotation,
+    bar_chart = pygal.Bar(
+            x_label_rotation=x_label_rotation,
             style=default_style,
-            range=(0, 100), width=width)  # Create a bar graph object
+            range=(0, 100),
+            width=width
+            )
     bar_chart.title = 'Mapped and Validated in %'
     if mean is None:
         bar_chart.x_labels = [str(d['projectId']) for d in data]
@@ -63,12 +66,8 @@ def visualize(data, width, x_label_rotation, mean=None):
 
 
 def visualize_to_map(data):
-    m = folium.Map(tiles='Mapbox Bright', zoom_start=2) 
+    m = folium.Map(tiles='Mapbox Bright', zoom_start=2)
     featureCollection = {"type": "FeatureCollection", "features": []}
-    # aoiCoordinates = []
-    # for d in data:
-        # aoi = d['aoi']['coordinates']
-        # folium.features.PolygonMarker(locations=aoi).add_to(m)
     for d in data:
         aoi = d['aoi']
         feature = {"type": "Feature", "geometry": aoi}

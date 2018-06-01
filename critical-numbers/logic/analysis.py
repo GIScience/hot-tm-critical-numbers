@@ -1,4 +1,5 @@
-from shapely.geometry import MultiPolygon, shape
+from shapely.geometry import shape
+
 
 def arithmetic_mean(data):
     '''returns arithmetic mean of given list of stats'''
@@ -9,11 +10,11 @@ def arithmetic_mean(data):
             percentValidatedMean = percentValidatedMean + d['percentValidated']
     percentMappedMean = percentMappedMean * 100 / (100 * len(data))
     percentValidatedMean = percentValidatedMean * 100 / (100 * len(data))
-    
+
     name = 'Arithmetic mean'
 
-    stats = { 
-            'name': name, 
+    stats = {
+            'name': name,
             'percentMapped': percentMappedMean,
             'percentValidated': percentValidatedMean,
             }

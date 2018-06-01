@@ -1,7 +1,6 @@
-# Author: M. Schaub, 2018, GIScience Heidelberg 
+# Author: M. Schaub, 2018, GIScience Heidelberg
 import io
 import csv
-import json
 from geomet import wkt
 
 
@@ -43,7 +42,8 @@ def convert_to_geojson(data):
     for stats in data:
         aoi = stats['aoi']
         del stats['aoi']
-        feature = {"type": "Feature",
+        feature = {
+                "type": "Feature",
                 "geometry": {
                     "type": aoi['type'],
                     "coordinates": aoi['coordinates']
