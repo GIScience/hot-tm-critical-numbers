@@ -72,22 +72,23 @@ Or have a look at following tutorials:
 
 Gunicorn is a pure Python web server (robust production server).
 
-`gunicorn -b 127.0.0.1:5000 -w 4 webapp:app`
+`gunicorn -b 127.0.0.1:5000 -w 4 -t 300 webapp:app`
 
 - `-b`: option tells gunicorn where to listen for requests
 - `-w`: option configures how many workers gunicorn will run
+- `-t`: timeout = 300s. Has to be configured in ngix also.
 - `name_of_app_to_run:app`
 
 
 #### Supervisor
 
-The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files are stored at `/etc/supervisor/conf.d`.
+The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files are stored at `/etc/supervisor/conf.d/`.
 Here is a possible configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`).
 
 ```
 [program:hot-tm-critical-numbers]
-command=/data/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 webapp:app
-directory=/data/hot-tm-critical-numbers/critical-numbers
+command=/var/www/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 -t 300 webapp:app
+directory=/var/www/hot-tm-critical-numbers/critical-numbers
 user=username
 autostart=true
 autorestart=true
