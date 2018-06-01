@@ -1,9 +1,7 @@
 from flask import (
-        request,
         render_template,
         redirect,
         url_for,
-        flash,
         jsonify,
         send_file,
         )
@@ -22,7 +20,6 @@ from logic import (
        analysis,
        converter,
        )
-from io import BytesIO
 from string import Template
 from urllib import parse
 

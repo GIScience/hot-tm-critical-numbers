@@ -109,8 +109,6 @@ def get_search_stats(base_url):
                         )
                 stats['aoi'] = get_aoi(stats['projectId'])
                 collection_stats.append(stats)
-            if i == 2:
-                break
         return collection_stats
     else:
         return []

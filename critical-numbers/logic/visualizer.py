@@ -3,7 +3,7 @@
 import folium
 import pygal
 from pygal.style import DefaultStyle
-from logic import converter
+from logic import converter, analysis
 
 
 def visualize_for_website(data, mean):
@@ -73,11 +73,13 @@ def visualize_to_map(data, mean):
         featureCollection = data[0]['aoi']
     else:
         featureCollection = converter.convert_to_geojson(data)
-       # for d in data:
-       #     aoi = d['aoi']
-       #     feature = {"type": "Feature", "geometry": aoi}
-       #     featureCollection["features"].append(feature)
     folium.GeoJson(featureCollection).add_to(m)
+    centroids = analysis.get_centroid(featureCollection)
+    for centroid in centroids:
+        folium.Marker(
+                location=centroid['aoi'],
+                popup=str(centroid['projectId'])
+                ).add_to(m)
     m = m.get_root()
     m = m.render()
     return m

@@ -36,3 +36,18 @@ def intersected(mapswipe_projects, hot_tm_projects):
                 intersected_projects['features'].append(mapswipe_feature)
                 intersected_projects['features'].append(hot_tm_feature)
     return intersected_projects
+
+
+def get_centroid(featureCollection):
+    centroids = []
+    for feature in featureCollection['features']:
+        centroid = {}
+        projectId = feature['properties']['projectId']
+        geom = shape(feature['geometry'])
+        centroid['projectId'] = projectId
+        centroid['aoi'] = [
+                geom.centroid.xy[1][0],
+                geom.centroid.xy[0][0]
+                ]
+        centroids.append(centroid)
+    return centroids

@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import requests
 from logic import api_requests, analysis, converter
 
@@ -10,12 +9,12 @@ result = requests.get(url)
 mapswipe_projects = result.json()
 
 dirname = 'output'
-#filename = sys.argv[1]
-#if not os.path.exists(dirname):
-    #os.makedirs(dirname)
+# filename = sys.argv[1]
+# if not os.path.exists(dirname):
+    # os.makedirs(dirname)
 
-#with open(filename, 'r') as f:
-    #mapswipe_projects = json.load(f)
+# with open(filename, 'r') as f:
+    # mapswipe_projects = json.load(f)
 
 hot_tm_projects = api_requests.get_stats()
 hot_tm_projects = converter.convert_to_geojson(hot_tm_projects)
