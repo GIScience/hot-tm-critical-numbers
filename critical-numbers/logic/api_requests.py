@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+from urllib import parse
 
 
 def get_aoi(projectId):
@@ -44,13 +45,13 @@ def get_stats(projectIds=None, organisation=None, campaign_tag=None):
         return get_projectId_stats(projectIds)
 
     elif organisation is not None:
-        organisation = organisation.replace('_', '%20')
+        organisation = parse.quote(organisation)
         url = f'https://tasks.hotosm.org/api/v1/project/search?organisationTag={organisation}'
         return get_search_stats(url)
 
     elif campaign_tag is not None:
-        campaign_tag = campaign_tag.replace('_', '%20')
-        url = f'https://tasks.hotosm.org/api/v1/projectsearch?campaignTag={campaign_tag}'
+        campaign_tag = parse.quote(campaign_tag)
+        url = f'https://tasks.hotosm.org/api/v1/project/search?campaignTag={campaign_tag}'
         return get_search_stats(url)
     else:
         url = 'https://tasks.hotosm.org/api/v1/project/search?mapperLevel=ALL'

@@ -13,6 +13,7 @@ from webapp.forms import (
         OrganisationForm,
         CampaignTagForm,
         DownloadDataForm,
+        DownloadDataFormGeoJson,
         ViewChartForm,
         )
 from logic import (
@@ -22,6 +23,8 @@ from logic import (
        converter,
        )
 from io import BytesIO
+from string import Template
+from urllib import parse
 
 
 prefix = '/critical_numbers'
@@ -52,7 +55,7 @@ def show_chart_of_projectIds(projectIds, mean):
 
 
 @app.route(
-        prefix + '/organisation/<string:organisation>/',
+        prefix + '/organisation/<string:organisation>',
         defaults={'mean': None},
         methods=['GET', 'POST']
         )
@@ -68,8 +71,9 @@ def show_chart_of_organisation_projects(organisation, mean):
 
 
 @app.route(
-        prefix + '/campaign_tag/<string:campaign_tag>/',
-        defaults={'mean': None}, methods=['GET', 'POST']
+        prefix + '/campaign_tag/<string:campaign_tag>',
+        defaults={'mean': None},
+        methods=['GET', 'POST']
         )
 @app.route(
         prefix + '/campaign_tag/<string:campaign_tag>/<string:mean>',
@@ -87,35 +91,57 @@ def view(data=None, mean=None):
     projectIdForm = ProjectIdForm()
     organisationForm = OrganisationForm()
     campaignTagForm = CampaignTagForm()
-    downloadDataForm = DownloadDataForm()
     viewChartForm = ViewChartForm()
+
+    if mean:
+        data = [analysis.arithmetic_mean(data)]
+        downloadDataForm = DownloadDataFormGeoJson()
+    else:
+        downloadDataForm = DownloadDataForm()
 
     if projectIdForm.validate_on_submit():
         projectIds = projectIdForm.projectId.data
         projectIds = projectIds.replace(' ', '+')
         if projectIdForm.average.data:
-            return redirect(f'{prefix}/projectid/{projectIds}/mean')
+            url = Template('$prefix/projectid/$projectIds/$mean')
+            url = url.substitute(prefix=prefix, projectIds=projectIds, mean='mean')
+            return redirect(url)
         else:
-            return redirect(f'{prefix}/projectid/{projectIds}')
+            url = Template('$prefix/projectid/$projectIds')
+            url = url.substitute(prefix=prefix, projectIds=projectIds,)
+            return redirect(url)
 
     elif organisationForm.validate_on_submit():
         organisation = organisationForm.organisation.data
+        organisation = parse.quote(organisation)
         if organisationForm.average.data:
-            return redirect(f'{prefix}/organisation/{organisation}/mean')
+            url = Template('$prefix/organisation/$organisation/$mean')
+            url = url.substitute(prefix=prefix, organisation=organisation, mean='mean')
+            return redirect(url)
         else:
-            return redirect(f'{prefix}/organisation/{organisation}/')
+            url = Template('$prefix/organisation/$organisation')
+            url = url.substitute(prefix=prefix, organisation=organisation)
+            return redirect(url)
 
     elif campaignTagForm.validate_on_submit():
         campaign_tag = campaignTagForm.campaign_tag.data
+        campaign_tag = parse.quote(campaign_tag)
         if campaignTagForm.average.data:
-            return redirect(f'{prefix}/campaign_tag/{campaign_tag}/mean')
+            url = Template('$prefix/campaign_tag/$campaign_tag/$mean')
+            url = url.substitute(prefix=prefix, campaign_tag=campaign_tag, mean='mean')
+            return redirect(url)
         else:
-            return redirect(f'{prefix}/campaign_tag/{campaign_tag}/')
+            url = Template('$prefix/campaign_tag/$campaign_tag')
+            url = url.substitute(prefix=prefix, campaign_tag=campaign_tag)
+            return redirect(url)
 
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
         if download_data_as == 'geojson':
-            return jsonify(converter.convert_to_geojson(data))
+            if mean:
+                return jsonify(data[0])
+            else:
+                return jsonify(converter.convert_to_geojson(data))
         elif download_data_as == 'csv':
             csvBytesIO = converter.convert_to_csv(data)
             return send_file(
@@ -138,13 +164,11 @@ def view(data=None, mean=None):
                     viewChartForm=viewChartForm
                     )
         else:
-            if mean is True and len(data) > 1:
-                data = [analysis.arithmetic_mean(data)]
             chart, chart_size, table = visualizer.visualize_for_website(
                     data,
                     mean,
                     )
-            leaflet_map = visualizer.visualize_to_map(data)
+            leaflet_map = visualizer.visualize_to_map(data, mean)
             return render_template(
                     'template.html',
                     projectIdForm=projectIdForm,

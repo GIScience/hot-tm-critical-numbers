@@ -3,6 +3,7 @@
 import folium
 import pygal
 from pygal.style import DefaultStyle
+from logic import converter
 
 
 def visualize_for_website(data, mean):
@@ -65,13 +66,17 @@ def visualize(data, width, x_label_rotation, mean=None):
     return bar_chart
 
 
-def visualize_to_map(data):
+def visualize_to_map(data, mean):
     m = folium.Map(tiles='Mapbox Bright', zoom_start=2)
     featureCollection = {"type": "FeatureCollection", "features": []}
-    for d in data:
-        aoi = d['aoi']
-        feature = {"type": "Feature", "geometry": aoi}
-        featureCollection["features"].append(feature)
+    if mean:
+        featureCollection = data[0]['aoi']
+    else:
+        featureCollection = converter.convert_to_geojson(data)
+       # for d in data:
+       #     aoi = d['aoi']
+       #     feature = {"type": "Feature", "geometry": aoi}
+       #     featureCollection["features"].append(feature)
     folium.GeoJson(featureCollection).add_to(m)
     m = m.get_root()
     m = m.render()

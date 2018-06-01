@@ -1,3 +1,4 @@
+from logic import converter
 from shapely.geometry import shape
 
 
@@ -17,6 +18,7 @@ def arithmetic_mean(data):
             'name': name,
             'percentMapped': percentMappedMean,
             'percentValidated': percentValidatedMean,
+            'aoi': converter.convert_to_geojson(data)
             }
     return stats
 
