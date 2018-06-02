@@ -90,7 +90,7 @@ def view(data=None, mean=None):
     campaignTagForm = CampaignTagForm()
     viewChartForm = ViewChartForm()
 
-    if mean:
+    if mean and data:
         data = [analysis.arithmetic_mean(data)]
         downloadDataForm = DownloadDataFormGeoJson()
     else:
@@ -135,7 +135,7 @@ def view(data=None, mean=None):
     elif downloadDataForm.validate_on_submit():
         download_data_as = downloadDataForm.download_data.data
         if download_data_as == 'geojson':
-            if mean:
+            if mean and data:
                 return jsonify(data[0])
             else:
                 return jsonify(converter.convert_to_geojson(data))
@@ -165,7 +165,10 @@ def view(data=None, mean=None):
                     data,
                     mean,
                     )
-            leaflet_map = visualizer.visualize_to_map(data, mean)
+            if data:
+                leaflet_map = visualizer.visualize_to_map(data, mean)
+            else:
+                leaflet_map = None
             return render_template(
                     'template.html',
                     projectIdForm=projectIdForm,

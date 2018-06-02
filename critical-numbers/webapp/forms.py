@@ -19,7 +19,7 @@ class OrganisationForm(FlaskForm):
     organisationsTuples = []
     for organisation in organisations:
         organisationsTuples.append((
-            organisation.replace(' ', '_'),
+            organisation,
             organisation
             ))
 
@@ -38,7 +38,7 @@ class CampaignTagForm(FlaskForm):
     campaign_tags_tuples = []
     for campaign_tag in campaign_tags:
         campaign_tags_tuples.append((
-            campaign_tag.replace(' ', '_'),
+            campaign_tag,
             campaign_tag
             ))
     campaign_tag = SelectField(
