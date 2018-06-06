@@ -8,7 +8,7 @@ with open("readme.md", 'r') as f:
 
 setup(
     name='critical_numbers',
-    version='0.1',
+    version='1.0',
     description='A GIScience Heidelberg project for the HOT Tasking Manager',
     long_description=long_description,
     author='GIScience Heidelberg',
@@ -22,7 +22,6 @@ setup(
         ''',
     keywords=['HOT', 'GIScience',],
     classifiers=[
-        'Development Status :: Alpha',
         'Natural Language :: English',
     ],
 )

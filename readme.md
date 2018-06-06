@@ -28,6 +28,10 @@ Following python packages and their dependences are required:
     - Python data, leaflet.js maps
 - gunicorn
     - serve the website in production
+- shaply
+    - manipulation and analysis of geometric objects
+- wtfforms
+    - form handling
 
 Install requirements via setup.py (See Installtion Steps).
 
@@ -76,7 +80,7 @@ Gunicorn is a pure Python web server (robust production server).
 
 - `-b`: option tells gunicorn where to listen for requests
 - `-w`: option configures how many workers gunicorn will run
-- `-t`: timeout = 300s. Has to be configured in ngix also.
+- `-t`: option to set timeout. Should be set to 300s. Has to be configured in ngix also.
 - `name_of_app_to_run:app`
 
 
