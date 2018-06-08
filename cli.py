@@ -1,5 +1,6 @@
 # Author: M. Schaub, 2018, GIScience Heidelberg
 import click
+import json
 from critical_numbers import app
 from critical_numbers.logic import api_requests, converter
 
