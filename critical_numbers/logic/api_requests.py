@@ -96,7 +96,11 @@ def get_search_stats(base_url):
             print(f'{int(i*100/pages)}%')
             url = f'{base_url}&page={i+1}'
             request = requests.get(url, headers=headers)
-            request.raise_for_status()
+            if request.status_code == 500: 
+                continue
+                #API returns:
+                #"Project GET - unhandled error: division by zero"
+                #for page 77 of 106
             request = request.json()
             for stats in request['results']:
                 del stats['mapperLevel']

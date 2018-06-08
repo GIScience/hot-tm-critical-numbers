@@ -42,13 +42,20 @@ def convert_to_geojson(data):
     for stats in data:
         aoi = stats['aoi']
         del stats['aoi']
-        feature = {
-                "type": "Feature",
-                "geometry": {
-                    "type": aoi['type'],
-                    "coordinates": aoi['coordinates']
-                    },
-                "properties": stats
-                }
+        if aoi is None:
+            feature = {
+                    "type": "Feature",
+                    "geometry": None,
+                    "properties": stats
+                    }
+        else:
+            feature = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": aoi['type'],
+                        "coordinates": aoi['coordinates']
+                        },
+                    "properties": stats
+                    }
         featureCollection['features'].append(feature)
     return featureCollection
