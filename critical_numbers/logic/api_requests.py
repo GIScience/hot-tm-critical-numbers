@@ -96,6 +96,7 @@ def get_search_stats(base_url):
             print(f'{int(i*100/pages)}%')
             url = f'{base_url}&page={i+1}'
             request = requests.get(url, headers=headers)
+            request.raise_for_status()
             request = request.json()
             for stats in request['results']:
                 del stats['mapperLevel']

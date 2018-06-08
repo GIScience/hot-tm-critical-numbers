@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired
-from logic import api_requests
+from critical_numbers.logic import api_requests
 
 
 class ProjectIdForm(FlaskForm):

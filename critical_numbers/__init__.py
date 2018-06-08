@@ -1,5 +1,6 @@
 from flask import Flask
-from config import Config
+from .config import Config
+
 
 app = Flask(__name__)
 
@@ -11,9 +12,4 @@ app.url_map.converters['list'] = ListConverter
 app.config.from_object(Config)
 bootstrap = Bootstrap(app)
 
-
-from webapp import routes
-
-
-def serve():
-    app.run()
+from critical_numbers.views import routes

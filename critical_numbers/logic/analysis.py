@@ -1,4 +1,4 @@
-from logic import converter
+from . import converter
 from shapely.geometry import shape
 
 

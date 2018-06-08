@@ -1,3 +1,4 @@
+from critical_numbers import app
 from flask import (
         render_template,
         redirect,
@@ -5,16 +6,15 @@ from flask import (
         jsonify,
         send_file,
         )
-from webapp import app
-from webapp.forms import (
-        ProjectIdForm,
-        OrganisationForm,
-        CampaignTagForm,
-        DownloadDataForm,
-        DownloadDataFormGeoJson,
-        ViewChartForm,
-        )
-from logic import (
+from critical_numbers.views import forms
+       # ProjectIdForm,
+       # OrganisationForm,
+       # CampaignTagForm,
+       # DownloadDataForm,
+       # DownloadDataFormGeoJson,
+       # ViewChartForm,
+       # )
+from critical_numbers.logic import (
        api_requests,
        visualizer,
        analysis,
@@ -85,16 +85,16 @@ def show_chart_of_campaignTag_projects(campaign_tag, mean):
 
 def view(data=None, mean=None):
     '''form validation, redirecting and template rendering for all sites'''
-    projectIdForm = ProjectIdForm()
-    organisationForm = OrganisationForm()
-    campaignTagForm = CampaignTagForm()
-    viewChartForm = ViewChartForm()
+    projectIdForm = forms.ProjectIdForm()
+    organisationForm = forms.OrganisationForm()
+    campaignTagForm = forms.CampaignTagForm()
+    viewChartForm = forms.ViewChartForm()
 
     if mean and data:
         data = [analysis.arithmetic_mean(data)]
-        downloadDataForm = DownloadDataFormGeoJson()
+        downloadDataForm = forms.DownloadDataFormGeoJson()
     else:
-        downloadDataForm = DownloadDataForm()
+        downloadDataForm = forms.DownloadDataForm()
 
     if projectIdForm.validate_on_submit():
         projectIds = projectIdForm.projectId.data

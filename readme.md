@@ -33,14 +33,14 @@ Following python packages and their dependences are required:
 - wtfforms
     - form handling
 
-Install requirements via setup.py (See Installtion Steps).
+Install requirements via setup.py (See installation steps).
 
 
 ### Installation Steps
 
 - Clone repository
     - `git clone https://github.com/GIScience/hot-tm-critical-numbers.git`
-- Change to CriticalNumbers directory
+- Change to hot-tm-critical-numbers directory
     - `cd hot-tm-critical-numbers/`
 - Create and activate virtual environment
     - `python3 -m venv venv` (or use `virtualenv -p python3.6 venv`)
@@ -51,8 +51,20 @@ Install requirements via setup.py (See Installtion Steps).
 
 ## Usage
 
-Run `python -m cli serve` to serve the website on port 5000.
-Until fixed the server will listen to `127.0.0.1:5000/critical_numbers/`.
+```shell
+Usage: cli.py [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  getall  gets all projects from the HOT Tasking...
+  serve   serves webapp to 127.0.0.1:5000
+```
+
+- Run `python -m cli serve` to serve the website on port 5000
+    - Until fixed the server will listen to `127.0.0.1:5000/critical_numbers/`
+- Run `python -m cli getall` to get all projects from the HOT Tasking Manager as GeoJSON (This could take a while)
 
 
 ## Deployment

@@ -3,7 +3,7 @@
 import folium
 import pygal
 from pygal.style import DefaultStyle
-from logic import converter, analysis
+from . import converter, analysis
 
 
 def visualize_for_website(data, mean):
