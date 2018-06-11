@@ -62,7 +62,7 @@ Commands:
   serve   serves webapp to 127.0.0.1:5000
 ```
 
-- Run `python -m cli serve` to serve the website on port 5000
+- Run `python -m cli serve` to serve the website locally on port 5000
     - Until fixed the server will listen to `127.0.0.1:5000/critical_numbers/`
 - Run `python -m cli getall` to get all projects from the HOT Tasking Manager as GeoJSON (This could take a while)
 
@@ -73,7 +73,9 @@ For deployment you should not use the build in web server of Flask (eg. `flask.r
 
 Recommend deployment stack for this application is:
 - Gunicorn (Application runner)
+- Supervisor
 - Nginx Reverse Proxy
+    - If a proxy is nedded
 
 See official docs for more information: http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
 
@@ -99,12 +101,12 @@ Gunicorn is a pure Python web server (robust production server).
 #### Supervisor
 
 The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files are stored at `/etc/supervisor/conf.d/`.
-Here is a possible configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`).
+Here is a configuration file for hot-tm-critical-numbers (`hot-tm-critical-numbers.conf`).
 
 ```
 [program:hot-tm-critical-numbers]
 command=/var/www/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 -t 300 critical_numbers:app
-directory=/var/www/hot-tm-critical-numbers/critical-numbers
+directory=/var/www/hot-tm-critical-numbers
 user=username
 autostart=true
 autorestart=true
