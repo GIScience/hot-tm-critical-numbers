@@ -103,7 +103,7 @@ Here is a possible configuration file for hot-tm-critical-numbers (`hot-tm-criti
 
 ```
 [program:hot-tm-critical-numbers]
-command=/var/www/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 -t 300 webapp:app
+command=/var/www/hot-tm-critical-numbers/venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 -t 300 critical_numbers:app
 directory=/var/www/hot-tm-critical-numbers/critical-numbers
 user=username
 autostart=true

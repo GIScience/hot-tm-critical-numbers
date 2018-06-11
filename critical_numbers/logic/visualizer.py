@@ -23,7 +23,8 @@ def visualize_for_website(data, mean):
     bar_chart = visualize(data, width, x_label_rotation, mean)
 
     chart = bar_chart.render_data_uri()
-    table = bar_chart.render_table(style=True)
+    #table = bar_chart.render_table(style=True)
+    table=None
 
     return chart, chart_size, table
 

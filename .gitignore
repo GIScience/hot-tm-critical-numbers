@@ -4,7 +4,6 @@ map.html
 *.csv
 *.wkt
 *.sh
-Dockerfile
 
 # Created by https://www.gitignore.io/api/python
 
