@@ -19,19 +19,19 @@ Following python packages and their dependences are required:
 - geomet
     - GeoJSON to WKT conversion
 - flask
-    - Website
+    - website
 - flask-wtf
-    - Website form handlich
-- flask-bootstrap
-    - Website style
-- folium
-    - Python data, leaflet.js maps
-- gunicorn
-    - serve the website in production
-- shaply
-    - manipulation and analysis of geometric objects
+    - website forms
 - wtfforms
     - form handling
+- flask-bootstrap
+    - website template
+- folium
+    - python data, leaflet.js maps
+- gunicorn
+    - robust production server
+- shaply
+    - manipulation and analysis of geometric objects
 
 Install requirements via setup.py (See installation steps).
 
@@ -50,6 +50,8 @@ Install requirements via setup.py (See installation steps).
 
 
 ## Usage
+
+- Run `python -m cli --help` to show:
 
 ```shell
 Usage: cli.py [OPTIONS] COMMAND [ARGS]...
@@ -78,10 +80,6 @@ Recommend deployment stack for this application is either:
 Or use Docker.
 
 See official docs for more information: http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
-
-Or have a look at following tutorials: 
-- http://exploreflask.com/en/latest/deployment.html
-- https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux
 
 
 ### Gunicorn and Supervisor
@@ -118,7 +116,11 @@ stdout_logfile=/var/log/hot-tm-critical-numbers/err.log
 
 Logs can be viewed at `/var/log/hot-tm-critical-numbers/`.
 
-To run or rerun supervisor and configured programs (e.g. hot-tm-critical-numbers) it is enough to run `supervisorctl reload`.
+To run or rerun supervisor and configured programs (e.g. hot-tm-critical-numbers) it is enough to run:
+
+```
+supervisorctl reload
+```
 
 Following commands could be also be useful:
 - `supervisorctl start hot-tm-critical-numbers`
@@ -135,8 +137,11 @@ To build a container image use following command inside of hot-tm-critical-numbe
 docker build -t critical_numbers .
 ```
 
-List container images with the `docker images` command.
+List container images with:
 
+```
+docker images
+```
 
 To run the container:
 
@@ -149,11 +154,13 @@ docker run --name critical_numbers -d -p 5000:5000 --rm critical_numbers:latest
 - `--rm`: deltes container once it is terminated
 - the last argument is the container image name and tag
 
+List running containers with:
 
-List running containers with the `docker ps` command.
+```
+docker ps
+```
 
-
-To stop the container (use `docker ps` to get the Container Id:
+To stop the container (use `docker ps` to get the Container Id):
 
 ```
 docker stop <Container Id>
