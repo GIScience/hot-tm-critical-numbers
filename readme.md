@@ -71,11 +71,11 @@ Commands:
 
 For deployment you should not use the build in web server of Flask (eg. `flask.run()` which `cli serve` is relying upon).
 
-Recommend deployment stack for this application is:
-- Gunicorn (Application runner)
+Recommend deployment stack for this application is either:
+- Gunicorn
 - Supervisor
-- Nginx Reverse Proxy
-    - If a proxy is nedded
+
+Or use Docker.
 
 See official docs for more information: http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
 
@@ -84,7 +84,7 @@ Or have a look at following tutorials:
 - https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux
 
 
-### Setting Up Gunicorn and Supervisor
+### Gunicorn and Supervisor
 
 #### Gunicorn
 
@@ -125,3 +125,36 @@ Following commands could be also be useful:
 - `supervisorctl stop hot-tm-critical-numbers`
 - `supervisorctl reread`
 - `supervisorctl update`
+
+
+### Docker
+
+To build a container image use following command inside of hot-tm-critical-numbers folder (where the dockerfile is located):
+
+```
+docker build -t critical_numbers .
+```
+
+List container images with the `docker images` command.
+
+
+To run the container:
+
+```
+docker run --name critical_numbers -d -p 5000:5000 --rm critical_numbers:latest
+```
+
+- `d`: run in background
+- `p`: maps container ports to host ports
+- `--rm`: deltes container once it is terminated
+- the last argument is the container image name and tag
+
+
+List running containers with the `docker ps` command.
+
+
+To stop the container (use `docker ps` to get the Container Id:
+
+```
+docker stop <Container Id>
+```

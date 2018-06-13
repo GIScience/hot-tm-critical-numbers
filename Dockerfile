@@ -11,7 +11,7 @@ COPY cli.py cli.py
 COPY critical_numbers critical_numbers
 
 RUN apt-get update
-RUN yes | apt-get install libgeos++
+RUN apt-get -y install libgeos++
 RUN pip install .
 RUN chown -R critical_numbers:critical_numbers ./
 
