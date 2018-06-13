@@ -19,4 +19,4 @@ USER critical_numbers
 
 EXPOSE 5000
 
-ENTRYPOINT gunicorn -b :5000 --access-logfile - --error-logfile - -t 300 critical_numbers:app
+ENTRYPOINT gunicorn -b :5000 --access-logfile - --error-logfile - -t 300 -w 4 critical_numbers:app

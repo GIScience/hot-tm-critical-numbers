@@ -88,7 +88,7 @@ See official docs for more information: http://flask.pocoo.org/docs/0.12/deployi
 
 Gunicorn is a pure Python web server (robust production server).
 
-`gunicorn -b 127.0.0.1:5000 -w 4 -t 300 webapp:app`
+`gunicorn -b 127.0.0.1:5000 -w 4 -t 300 critical_numbers:app`
 
 - `-b`: option tells gunicorn where to listen for requests
 - `-w`: option configures how many workers gunicorn will run
@@ -146,12 +146,12 @@ docker images
 To run the container:
 
 ```
-docker run --name critical_numbers -d -p 5000:5000 --rm critical_numbers:latest
+docker run --name critical_numbers -d -p 5000:5000 --restart always --rm critical_numbers:latest
 ```
 
-- `d`: run in background
-- `p`: maps container ports to host ports
-- `--rm`: deltes container once it is terminated
+- `d`: run in background (detach)
+- `p`: maps container ports to host ports (publish)
+- `--rm`: deletes container once it is terminated
 - the last argument is the container image name and tag
 
 List running containers with:
@@ -164,4 +164,10 @@ To stop the container (use `docker ps` to get the Container Id):
 
 ```
 docker stop <Container Id>
+```
+
+To remove a container:
+
+```
+docker rm <image name>
 ```

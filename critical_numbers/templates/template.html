@@ -55,12 +55,13 @@
             </div>
         </div>
     </div> 
+    <br/>
     {% endif %}
 
     {% if leaflet_map is not none %}
-    <br>
     <div class="container">
         <iframe srcdoc="{{ leaflet_map }}" style="position: absolute; width: 75%; height: 50%; border: none"></iframe>
     </div>
     {% endif %}
+
 {% endblock %}
