@@ -6,7 +6,7 @@ from critical_numbers.logic import api_requests
 
 class ProjectIdForm(FlaskForm):
     projectId = StringField(
-            'Project Id (seperate by a blank)',
+            'Project Id (separate by a blank)',
             validators=[DataRequired()]
             )
     average = BooleanField('Average')
