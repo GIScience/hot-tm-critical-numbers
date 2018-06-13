@@ -146,12 +146,11 @@ docker images
 To run the container:
 
 ```
-docker run --name critical_numbers -d -p 5000:5000 --restart always --rm critical_numbers:latest
+docker run --name critical_numbers -d -p 5000:5000 --restart always critical_numbers:latest
 ```
 
 - `d`: run in background (detach)
 - `p`: maps container ports to host ports (publish)
-- `--rm`: deletes container once it is terminated
 - the last argument is the container image name and tag
 
 List running containers with:
