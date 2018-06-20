@@ -6,7 +6,7 @@ from critical_numbers.logic import api_requests
 
 class ProjectIdForm(FlaskForm):
     projectId = StringField(
-            'Project Id (seperate by a blank)',
+            'Project Id (seperate using a blank)',
             validators=[DataRequired()]
             )
     average = BooleanField('Average')
@@ -64,5 +64,5 @@ class DownloadDataFormGeoJson(FlaskForm):
     submit = SubmitField('Download data')
 
 
-class ViewChartForm(FlaskForm):
-    submit = SubmitField('View chart fullscreen')
+class DownloadChartForm(FlaskForm):
+    submit = SubmitField('Download Chart as SVG')

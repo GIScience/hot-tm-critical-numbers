@@ -7,13 +7,6 @@ from flask import (
         send_file,
         )
 from critical_numbers.views import forms
-       # ProjectIdForm,
-       # OrganisationForm,
-       # CampaignTagForm,
-       # DownloadDataForm,
-       # DownloadDataFormGeoJson,
-       # ViewChartForm,
-       # )
 from critical_numbers.logic import (
        api_requests,
        visualizer,
@@ -88,7 +81,7 @@ def view(data=None, mean=None):
     projectIdForm = forms.ProjectIdForm()
     organisationForm = forms.OrganisationForm()
     campaignTagForm = forms.CampaignTagForm()
-    viewChartForm = forms.ViewChartForm()
+    downloadChartForm = forms.DownloadChartForm()
 
     if mean and data:
         data = [analysis.arithmetic_mean(data)]
@@ -147,8 +140,9 @@ def view(data=None, mean=None):
                     as_attachment=True,
                     )
 
-    elif viewChartForm.validate_on_submit():
-        return visualizer.visualize_to_file(data, to_svg=True)
+    elif downloadChartForm.validate_on_submit():
+        chartBytesIO = visualizer.visualize_to_file(data, to_svg=True)
+        return send_file(chartBytesIO, attachment_filename="chart.svg",as_attachment=True)
 
     else:
         if data is None:
@@ -158,7 +152,7 @@ def view(data=None, mean=None):
                     organisationForm=organisationForm,
                     campaignTagForm=campaignTagForm,
                     downloadDataForm=downloadDataForm,
-                    viewChartForm=viewChartForm
+                    downloadnChartForm=downloadChartForm
                     )
         else:
             chart, chart_size, table = visualizer.visualize_for_website(
@@ -175,7 +169,7 @@ def view(data=None, mean=None):
                     organisationForm=organisationForm,
                     campaignTagForm=campaignTagForm,
                     downloadDataForm=downloadDataForm,
-                    viewChartForm=viewChartForm,
+                    downloadChartForm=downloadChartForm,
                     chart=chart,
                     chart_size=chart_size,
                     table=table,

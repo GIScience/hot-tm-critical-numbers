@@ -1,5 +1,5 @@
 # Author: M. Schaub, 2018, GIScience Heidelberg
-
+from io import BytesIO
 import folium
 import pygal
 from pygal.style import DefaultStyle
@@ -42,7 +42,11 @@ def visualize_to_file(data, to_svg):
 
     bar_chart = visualize(data, width, x_label_rotation)
 
-    return bar_chart.render_response()
+    chartBytesIO = BytesIO()
+    chartBytesIO.write(bar_chart.render())
+    chartBytesIO.seek(0)
+
+    return chartBytesIO
 
 
 def visualize(data, width, x_label_rotation, mean=None):
