@@ -3,7 +3,7 @@
 We would like to introduce our new little analysis tool for projects of the HOT Tasking Manager.
 
 The HOT Tasking Manager is an excellent effort to organize tasks around crowdsourced mapping efforts.
-To describe it in there own words:
+To describe it in their own words:
 
 > The Tasking Manager is a mapping tool designed and built for the Humanitarian OpenStreetMap Team's collaborative mapping process in OpenStreetMap. The purpose of the tool is to divide up a mapping project into smaller tasks that can be completed rapidly with many people working on the same overall area. It shows which areas need to be mapped and which areas need the mapping validated ([HOT Tasking Manager](https://tasks.hotosm.org/about))
 
