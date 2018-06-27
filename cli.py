@@ -1,4 +1,3 @@
-# Author: M. Schaub, 2018, GIScience Heidelberg
 import click
 import json
 from critical_numbers import app
