@@ -48,7 +48,7 @@ British Red Cross currently has 5 projects in the Tasking Manager. They are loca
 
 ## Download Data as GeoJSON for detailed Analysis: 
 
-On the website visualized projects can be download as GeoJSON. This can be useful for further analysis of displayed projects. The GeoJSON has following structure and information:
+Projects visualized on the website can be download as GeoJSON. This can be useful for further analysis of displayed projects. The GeoJSON has following structure and information. (`apiRequestTimestampUTC` refers to the time you requested the data from the HOT Tasking Manager API, the time you hit the "submit" button.)
 
 ```json
 {
