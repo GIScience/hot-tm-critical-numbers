@@ -41,9 +41,13 @@ Below are sample bar charts of the organizations British Red Cross, Médecins Sa
 British Red Cross currently has 5 projects in the Tasking Manager. They are located in Nepal and Bangladesh. On average the projects are mapped to 80%, but still need more validators. Only 5% of the overall area of the projects have been validated. Médecins Sans Frontières (MSF) have created 45 projects in the Tasking Manager, the Humanitarian OpenStreetMap Team (HOT) 143 projects, and all Missing Maps members together 278 projects. Both HOT and MSF have a strong presence in Africa. HOT especially in the eastern part, MSF more in subsaharan countries and Democratic Republic of the Congo (DRC). Missing Maps projects can be found almost everywhere. In terms of validation we see a lot projects which have been mapped *and* validated completely. But still, the average amount of validated tasks in a Missing Maps project is around 40%. For HOT it's 37%, for MSF 24%.
 
 ![British Red Cross](images/brc.svg)
+*Figure 4: Tasking Manager projects for British Red Cross*
 ![Médecins Sans Frontières](images/msf.svg)
+*Figure 5: Tasking Manager projects for Médecins Sans Frontières*
 ![Humanitarian OpenStreetMap Team](images/hot.svg)
+*Figure 6: Tasking Manager projects for HOT*
 ![Missing Maps](images/mm.svg)
+*Figure 7: Tasking Manager projects for Missing Maps*
 
 
 ## Download Data as GeoJSON for detailed Analysis: 
@@ -86,13 +90,16 @@ In the first step let's get the data into QGIS:
 3. Load the GeoJson into QGIS
 
 ![](images/qgis1.png)
+*Figure 8: Missing Maps projects in QGIS*
 
 In the second step we filter the projects which have been mapped completely (100%), but only little validation (<20%) has taken place. We can get this with following parameters using the select by expression tool of QGIS:
 
 ```"percentMapped" = 100 AND "percentValidated" < 20```
 
 ![](images/qgis2-selection.png)
+*Figure 9: Select projects in QGIS*
 ![](images/qgis3-attributes.png)
+*Figure 10: Attributes of selected projects*
 
 As can be seen in the Attribute Table 40 of 290 projects are mapped 100%, but have almost no validation. There are even projects with zero validation. This is an easy way to detect projects, where validation is needed and which are probably stagnating.
 
