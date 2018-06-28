@@ -2,6 +2,8 @@
 
 A GIScience Heidelberg project for the HOT Tasking Manager.
 
+* [Introduction and examples](blog-post.md)
+
 
 ## Installation
 
