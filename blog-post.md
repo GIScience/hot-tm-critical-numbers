@@ -1,4 +1,4 @@
-# Introducing the Critical Numbers Project for the HOT Tasking Manager 
+# Introducing the Critical Numbers Tool for the HOT Tasking Manager 
 
 We would like to introduce our new little analysis tool ["Critical Numbers"](https://disastertools.heigit.org/critical_numbers/) for projects of the HOT Tasking Manager. The Critical Numbers webapp is an easy way to visualize how much of a project is mapped and validated - results are provided in percent as a simple bar chart. Data can also be downloaded as GeoJSON for further processing in QGIS or other applications. It retrieves this data from the [HOT-Tasking-Manager API](https://tasks.hotosm.org/api-docs).
 
