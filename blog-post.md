@@ -76,7 +76,7 @@ Projects visualized on the website can be download as GeoJSON. This can be usefu
 
 ### Example Analysis
 
-A low percentage of validated tasks for a specific project might not always be a problem. It's just normal to do the mapping first and validate in the next step. But sometimes that *next step* never happens. Let's try not to forget those projects. Our preconception is that the projects, which are mapped 100% but have very little validation are stagnating. To investigate this issue further necessary to find out exactly which projects are affected. This Chapter will therefor depict a GIS Analysis using QGIS to answer the question:
+A low percentage of validated tasks for a specific project might not always be a problem. It's just normal to do the mapping first and validate in the next step. But sometimes that *next step* never happens. Let's try not to forget those projects. Our preconception is that the projects, which are mapped 100% but have very little validation are stagnating. To investigate this issue it is further necessary to find out exactly which projects are affected. This Chapter will therefor depict a GIS Analysis using QGIS to answer the question:
 
 - Are there projects which are mapped almost 100% but are lacking validation completely?
 
