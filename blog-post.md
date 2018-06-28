@@ -89,7 +89,7 @@ In the first step let's get the data into QGIS:
 2. Download the data of displayed projects as GeoJSON using the "Download Data" button of the webapp
 3. Load the GeoJson into QGIS
 
-![](images/qgis1.png)
+![](images/qgis1.PNG)
 *Figure 8: Missing Maps projects in QGIS*
 
 In the second step we filter the projects which have been mapped completely (100%), but only little validation (<20%) has taken place. We can get this with following parameters using the select by expression tool of QGIS:
