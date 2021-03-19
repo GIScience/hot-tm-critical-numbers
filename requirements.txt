@@ -13,7 +13,7 @@ geos==0.2.1
 gunicorn==19.7.1
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 lxml==4.2.1
 MarkupSafe==1.0
 pygal==2.4.0
